@@ -1,0 +1,26 @@
+{
+	"name": "examples-nextjs",
+	"version": "0.1.0",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"dev": "yarn build-server && node server/examples/nextjs/server-src/index.js",
+		"dev-debug": "yarn build-server && node --inspect-brk=9229 server/examples/nextjs/server-src/index.js",
+		"build": "next build && yarn run build-server",
+		"build-server": "rimraf server && tsc -p server-src/tsconfig.json",
+		"start": "cross-env NODE_ENV=production node server/examples/nextjs/server-src/index.js"
+	},
+	"dependencies": {
+		"dotenv": "^8.2.0",
+		"isomorphic-unfetch": "^3.0.0",
+		"next": "^9.2.2",
+		"react": "^16.13.0",
+		"react-dom": "^16.13.0"
+	},
+	"devDependencies": {
+		"@types/react": "^16.9.23",
+		"cross-env": "^7.0.1",
+		"rimraf": "^3.0.2",
+		"typescript": "^3.8.3"
+	}
+}

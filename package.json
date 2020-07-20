@@ -1,0 +1,115 @@
+{
+	"name": "@optum/openid-client-server",
+	"version": "0.1.0",
+	"description": "An OpenId Relying Party (RP, Client) application server.",
+	"license": "ISC",
+	"repository": "optum/openid-client-server",
+	"engines": {
+		"node": ">=8"
+	},
+	"scripts": {
+		"build": "rimraf dist && tsc -p tsconfig.build.json",
+		"test": "xo && nyc ava",
+		"lint": "xo --fix",
+		"clean": "rimraf coverage dist .nyc_output"
+	},
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org"
+	},
+	"main": "dist/index.js",
+	"files": [
+		"dist",
+		"src"
+	],
+	"keywords": [
+		"openid"
+	],
+	"dependencies": {
+		"cookies": "^0.8.0",
+		"crypto-random-string": "^3.1.0",
+		"jsonwebtoken": "^8.5.1",
+		"jwks-rsa": "^1.7.0",
+		"ms": "^2.1.2",
+		"nock": "^12.0.3",
+		"node-fetch": "^2.6.0",
+		"openid-client": "^3.14.0",
+		"p-pipe": "^3.0.0",
+		"pino": "^5.17.0",
+		"pino-pretty": "^3.6.0",
+		"qs": "^6.9.1"
+	},
+	"devDependencies": {
+		"@types/cookies": "^0.7.4",
+		"@types/jsonwebtoken": "^8.3.7",
+		"@types/ms": "^0.7.31",
+		"@types/node": "^13.7.0",
+		"@types/node-fetch": "^2.5.5",
+		"@types/pino": "^5.15.5",
+		"@types/qs": "^6.9.1",
+		"@types/uuid": "^7.0.2",
+		"@typescript-eslint/eslint-plugin": "^2.19.2",
+		"@typescript-eslint/parser": "^2.19.2",
+		"ava": "^3.5.0",
+		"dotenv": "^8.2.0",
+		"eslint": "^6.8.0",
+		"eslint-config-xo-typescript": "^0.26.0",
+		"mock-http": "^1.0.2",
+		"nyc": "^15.0.0",
+		"p-event": "^4.1.0",
+		"rimraf": "^3.0.2",
+		"ts-node": "^8.6.2",
+		"ts-sinon": "^1.0.25",
+		"typescript": "^3.7.5",
+		"uuid": "^7.0.2",
+		"xo": "^0.26.1"
+	},
+	"xo": {
+		"envs": [
+			"node"
+		],
+		"extends": [
+			"xo-typescript"
+		],
+		"extensions": [
+			"ts"
+		],
+		"prettier": true,
+		"semicolon": false,
+		"space": 4,
+		"rules": {
+			"capitalized-comments": 0
+		}
+	},
+	"nyc": {
+		"all": true,
+		"reporter": [
+			"lcov",
+			"text"
+		],
+		"extension": [
+			".ts"
+		],
+		"require": [
+			"ts-node/register"
+		],
+		"include": [
+			"src/**/*.ts"
+		]
+	},
+	"ava": {
+		"extensions": [
+			"ts"
+		],
+		"require": [
+			"ts-node/register"
+		],
+		"files": [
+			"test/*.test.ts",
+			"test/**/*.test.ts"
+		],
+		"cache": true,
+		"concurrency": 5,
+		"failFast": true,
+		"verbose": true
+	}
+}
