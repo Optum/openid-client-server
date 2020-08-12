@@ -27,7 +27,7 @@ export const signOutMiddleware = (
                 if (ctx.url.search) {
                     const {session_state} = qs.parse(ctx.url.search)
                     if (session_state) {
-                        sessionState = session_state
+                        sessionState = session_state as string
 
                         ctx.log.debug(
                             `session state was parsed from ctx.url.search as ${String(

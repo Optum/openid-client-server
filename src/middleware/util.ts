@@ -117,7 +117,10 @@ export const createUserInfoFromJwtService = (
             jwtVerify(
                 token,
                 getKey,
-                (err: VerifyErrors, decoded: object | string): void => {
+                (
+                    err: VerifyErrors | null,
+                    decoded: object | undefined
+                ): void => {
                     if (err) {
                         return reject(err)
                     }

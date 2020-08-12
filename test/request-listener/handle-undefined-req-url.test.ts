@@ -1,10 +1,11 @@
 import {Request, Response} from 'mock-http'
+import {PassThrough} from 'stream'
 import {createRequestListener, resolveOptions} from '../../src'
 
 import {MemorySessionStore} from '../../src/session'
 import {Options} from '../../src/options'
 import {clone} from '../../src/middleware/util'
-import sinon from 'ts-sinon'
+import sinon, {stubObject} from 'ts-sinon'
 import test from 'ava'
 
 const testOptions: Options = {
@@ -57,10 +58,12 @@ test('createRequestListener should do nothing if req.url is undefined and reques
 
     const options = clone(testOptions) as Options
     options.loggerOptions.level = 'debug'
-    // mock a stdout stream
-    options.loggerDestination = {
-        write: logWriteStub
-    }
+
+    const passThroughStream = new PassThrough()
+
+    const stubStream = stubObject(passThroughStream)
+    stubStream.write.callsFake(logWriteStub)
+    options.loggerDestination = stubStream
 
     const requestListener = await createRequestListener(options, sessionStore)
 
