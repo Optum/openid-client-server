@@ -22,7 +22,9 @@ export const signInMiddleware = (
                     throw new Error('invalid session')
                 }
 
-                const state = crs({length: 16})
+                const state = crs({
+                    length: 16
+                })
                 let authUrl
                 let codeVerifier: string | null = null
 

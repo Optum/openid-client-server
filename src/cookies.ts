@@ -36,7 +36,9 @@ export const getSessionId = (
     sessionKeys: string[]
 ): string | undefined => {
     const cookies = new Cookies(req, res, {keys: sessionKeys})
-    return cookies.get(sessionName, {signed: true})
+    return cookies.get(sessionName, {
+        signed: true
+    })
 }
 
 export const clearCookies = (

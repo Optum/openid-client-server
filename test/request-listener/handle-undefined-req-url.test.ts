@@ -1,47 +1,24 @@
 import {Request, Response} from 'mock-http'
 import {PassThrough} from 'stream'
 import {createRequestListener, resolveOptions} from '../../src'
-
+import nock from 'nock'
 import {MemorySessionStore} from '../../src/session'
 import {Options} from '../../src/options'
+import {
+    discoveryPath,
+    issuer,
+    openIdDiscoveryConfiguration,
+    testOptions
+} from '../helpers/test-options'
 import {clone} from '../../src/middleware/util'
 import sinon, {stubObject} from 'ts-sinon'
 import test from 'ava'
 
-const testOptions: Options = {
-    clientServerOptions: {
-        discoveryEndpoint:
-            'https://examples.auth0.com/.well-known/openid-configuration',
-        signInPath: '/openid/signin',
-        callbackPath: '/openid/callback',
-        processCallbackPath: '/openid/process-callback',
-        signOutPath: '/openid/signout',
-        userInfoPath: '/openid/userinfo',
-        errorPagePath: '/openid-error',
-        enablePKCE: false,
-        enableOauth2: false,
-        authorizationEndpoint: 'http://not-an-authorization-endpoint.test',
-        tokenEndpoint: 'http://not-a-token-endpoint.test',
-        userInfoEndpoint: 'http://not-a-user-info-endpoint.test'
-    },
-    sessionOptions: {
-        sessionKeys: ['test-session-keys'],
-        sessionName: 'openid:session',
-        sameSite: true
-    },
-    clientMetadata: {client_id: 'test-client-id'},
-    loggerOptions: {
-        level: 'silent',
-        useLevelLabels: true,
-        name: 'openid-client-server'
-    },
-    proxyOptions: {
-        proxyPaths: [],
-        proxyHosts: [],
-        excludeCookie: [],
-        useIdToken: []
-    }
-}
+test.beforeEach(t => {
+    t.context = nock(issuer)
+        .get(discoveryPath)
+        .reply(200, openIdDiscoveryConfiguration)
+})
 
 test('createRequestListener & resolveOptions should exist', t => {
     t.truthy(createRequestListener)

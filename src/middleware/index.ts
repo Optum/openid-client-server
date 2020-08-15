@@ -43,7 +43,6 @@ export const createMiddleware = (
 
     const userInfoFromJwtService = createUserInfoFromJwtService(
         jwksClient({
-            // TODO: make cache settings configurable
             cache: true,
             cacheMaxEntries: 5,
             cacheMaxAge: ms('8hr'),

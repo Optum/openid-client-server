@@ -6,7 +6,7 @@ import sinon, {stubInterface} from 'ts-sinon'
 import {Client} from 'openid-client'
 import {Logger} from 'pino'
 import {MemorySessionStore} from '../../../src/session'
-import {Options} from '../../../src/options'
+import {testOptionsWithoutScope} from '../../helpers/test-options'
 import {UrlWithParsedQuery} from 'url'
 import {createContext} from '../../../src/context'
 import {signInMiddleware} from '../../../src/middleware/signin-middleware'
@@ -14,46 +14,10 @@ import test from 'ava'
 
 const redirectStub = sinon.stub(util, 'redirectResponse')
 
-const testOptions: Options = {
-    clientServerOptions: {
-        discoveryEndpoint:
-            'https://examples.auth0.com/.well-known/openid-configuration',
-        signInPath: '/openid/signin',
-        callbackPath: '/openid/callback',
-        processCallbackPath: '/openid/process-callback',
-        signOutPath: '/openid/signout',
-        userInfoPath: '/openid/userinfo',
-        errorPagePath: '/openid-error',
-        enablePKCE: false,
-        enableOauth2: false,
-        authorizationEndpoint: 'http://not-an-authorization-endpoint.test',
-        tokenEndpoint: 'http://not-a-token-endpoint.test',
-        userInfoEndpoint: 'http://not-a-user-info-endpoint.test'
-    },
-    sessionOptions: {
-        sessionKeys: ['test-session-keys'],
-        sessionName: 'openid:session',
-        sameSite: true
-    },
-    clientMetadata: {client_id: 'test-client-id'},
-    loggerOptions: {
-        level: 'silent',
-        useLevelLabels: true,
-        name: 'openid-client-server'
-    },
-    proxyOptions: {
-        proxyPaths: [],
-        proxyHosts: [],
-        excludeCookie: [],
-        useIdToken: []
-    }
-}
-
 test('signInMiddleware should not include scope in auth url if not in clientServerOptions', async t => {
-    const {signInPath} = testOptions.clientServerOptions
+    const {signInPath} = testOptionsWithoutScope.clientServerOptions
     const clientStub = stubInterface<Client>()
     const store = new MemorySessionStore()
-    const testOptionsWithScope = util.clone(testOptions) as Options
     const unitTestSessionId = 'unit-test-session-id'
     const unitTestAuthUrl =
         'https://examples.auth0.com/authorize?scope=api://unit-test/access'
@@ -61,7 +25,7 @@ test('signInMiddleware should not include scope in auth url if not in clientServ
     const signin = signInMiddleware(
         clientStub,
         signInPath,
-        testOptionsWithScope,
+        testOptionsWithoutScope,
         store
     )
 

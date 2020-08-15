@@ -424,7 +424,9 @@ interface ParsedOptions {
 }
 
 const parseOptions = (envMapItems: EnvMapItem[]): ParsedOptions => {
-    const options: {[x: string]: any} = {}
+    const options: {
+        [x: string]: any
+    } = {}
     const errors: string[] = []
     for (const emi of envMapItems) {
         const value = process.env[emi.envKey]
