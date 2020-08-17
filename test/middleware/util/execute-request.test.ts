@@ -12,9 +12,7 @@ import test from 'ava'
 const testProxyHost = 'http://downstream-test.test'
 
 test.before('setup nock', () => {
-    nock(testProxyHost)
-        .post('/widgets')
-        .reply(200, '')
+    nock(testProxyHost).post('/widgets').reply(200, '')
 })
 
 test('executeRequest should fetch from expected url', async t => {

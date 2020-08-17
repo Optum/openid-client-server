@@ -80,7 +80,9 @@ export const processCallbackMiddleware = (
                     )
                 }
 
-                await sessionStore.set(ctx.sessionId, {tokenSet: ctx.tokenSet})
+                await sessionStore.set(ctx.sessionId, {
+                    tokenSet: ctx.tokenSet
+                })
 
                 redirectResponse(redirectUrl, ctx.res)
                 ctx.done = true

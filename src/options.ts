@@ -1,5 +1,5 @@
 import {BasicType, BasicTypeArray} from './json'
-import {DestinationStream, LoggerOptions} from 'pino'
+import {LoggerOptions} from 'pino'
 
 import {ClientMetadata} from 'openid-client'
 
@@ -42,7 +42,7 @@ export interface Options {
     sessionOptions: SessionOptions
     clientMetadata: ClientMetadata
     loggerOptions: LoggerOptions
-    loggerDestination?: DestinationStream
+    loggerDestination?: NodeJS.WritableStream
     proxyOptions: ProxyOptions
 }
 
@@ -424,7 +424,9 @@ interface ParsedOptions {
 }
 
 const parseOptions = (envMapItems: EnvMapItem[]): ParsedOptions => {
-    const options: {[x: string]: any} = {}
+    const options: {
+        [x: string]: any
+    } = {}
     const errors: string[] = []
     for (const emi of envMapItems) {
         const value = process.env[emi.envKey]

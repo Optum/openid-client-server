@@ -6,7 +6,7 @@ import sinon, {stubInterface} from 'ts-sinon'
 
 import {IdTokenClaims} from 'openid-client'
 import {Logger} from 'pino'
-import {Options} from '../../../src/options'
+import {testOptions} from '../../helpers/test-options'
 import {UrlWithParsedQuery} from 'url'
 import {createContext} from '../../../src/context'
 import crs from 'crypto-random-string'
@@ -16,52 +16,18 @@ import {v4 as uuid} from 'uuid'
 
 const redirectStub = sinon.stub(util, 'redirectResponse')
 
-const testOptions: Options = {
-    clientServerOptions: {
-        discoveryEndpoint:
-            'https://examples.auth0.com/.well-known/openid-configuration',
-        signInPath: '/openid/signin',
-        callbackPath: '/openid/callback',
-        processCallbackPath: '/openid/process-callback',
-        signOutPath: '/openid/signout',
-        userInfoPath: '/openid/userinfo',
-        errorPagePath: '/openid-error',
-        enablePKCE: false,
-        enableOauth2: false,
-        authorizationEndpoint: 'http://not-an-authorization-endpoint.test',
-        tokenEndpoint: 'http://not-a-token-endpoint.test',
-        userInfoEndpoint: 'http://not-a-user-info-endpoint.test'
-    },
-    sessionOptions: {
-        sessionKeys: ['test-session-keys'],
-        sessionName: 'openid:session',
-        sameSite: true
-    },
-    clientMetadata: {client_id: 'test-client-id'},
-    loggerOptions: {
-        level: 'silent',
-        useLevelLabels: true,
-        name: 'openid-client-server'
-    },
-    proxyOptions: {
-        proxyPaths: [],
-        proxyHosts: [],
-        excludeCookie: [],
-        useIdToken: []
-    }
-}
-
 test('signOutMiddleware should destroy session when found in session store', async t => {
     const {signOutPath} = testOptions.clientServerOptions
     const testSessionId = uuid()
-    const testSessionState = crs({length: 10})
-    const testCsrfString = crs({length: 10})
+    const testSessionState = crs({
+        length: 10
+    })
+    const testCsrfString = crs({
+        length: 10
+    })
     const testRedirectUrl = '/home-test'
 
     const claims = stubInterface<IdTokenClaims>()
-    // const stubSession = stubInterface<Session>()
-    // stubSession.sessionId = testSessionId
-
     const stubSession: Session = {
         sessionId: testSessionId,
         createdAt: Date.now(),

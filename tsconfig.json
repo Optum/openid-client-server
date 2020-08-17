@@ -5,7 +5,6 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": true,
-        "jsx": "preserve",
         "lib": ["ES2019"],
         "module": "commonjs",
         "moduleResolution": "node",
@@ -18,11 +17,6 @@
         "strict": true,
         "target": "ES2019"
     },
-    "exclude": ["node_modules"],
-    "include": [
-        "src/**/*.ts",
-        "test/**/*.ts",
-        "examples/**/*.ts",
-        "examples/**/*.tsx"
-    ]
+    "exclude": ["node_modules", "examples"],
+    "include": ["src/**/*.ts", "test/**/*.ts"]
 }

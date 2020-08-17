@@ -6,7 +6,7 @@ import sinon, {stubInterface} from 'ts-sinon'
 
 import {Logger} from 'pino'
 import {MemorySessionStore} from '../../../src/session'
-import {Options} from '../../../src/options'
+import {makeOptionsWithScope} from '../../helpers/test-options'
 import {UrlWithParsedQuery} from 'url'
 import {createContext} from '../../../src/context'
 import crs from 'crypto-random-string'
@@ -16,41 +16,7 @@ import {v4 as uuid} from 'uuid'
 
 const redirectResponseStub = sinon.stub(util, 'redirectResponse')
 
-const testOptions: Options = {
-    clientServerOptions: {
-        discoveryEndpoint:
-            'https://examples.auth0.com/.well-known/openid-configuration',
-        signInPath: '/openid/signin',
-        callbackPath: '/openid/callback',
-        processCallbackPath: '/openid/process-callback',
-        signOutPath: '/openid/signout',
-        userInfoPath: '/openid/userinfo',
-        errorPagePath: '/openid-error',
-        enablePKCE: false,
-        enableOauth2: false,
-        authorizationEndpoint: 'http://not-an-authorization-endpoint.test',
-        tokenEndpoint: 'http://not-a-token-endpoint.test',
-        userInfoEndpoint: 'http://not-a-user-info-endpoint.test',
-        scope: 'openid'
-    },
-    sessionOptions: {
-        sessionKeys: ['test-session-keys'],
-        sessionName: 'openid:session',
-        sameSite: true
-    },
-    clientMetadata: {client_id: 'test-client-id'},
-    loggerOptions: {
-        level: 'silent',
-        useLevelLabels: true,
-        name: 'openid-client-server'
-    },
-    proxyOptions: {
-        proxyPaths: [],
-        proxyHosts: [],
-        excludeCookie: [],
-        useIdToken: []
-    }
-}
+const testOptions = makeOptionsWithScope('openid')
 
 test('processCallbackMiddleware should process openid callback and redirect to fromUrl', async t => {
     const {processCallbackPath} = testOptions.clientServerOptions
@@ -58,8 +24,12 @@ test('processCallbackMiddleware should process openid callback and redirect to f
     const tokenSetStub = stubInterface<TokenSet>()
     const sessionStore = new MemorySessionStore()
     const testSessionId = uuid()
-    const testCsrfString = crs({length: 10})
-    const testSessionState = crs({length: 10})
+    const testCsrfString = crs({
+        length: 10
+    })
+    const testSessionState = crs({
+        length: 10
+    })
     const testCode = crs({length: 128})
     const testRedirectUrl = '/home-test'
 

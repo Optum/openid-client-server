@@ -22,7 +22,9 @@ test('userInfoMiddleware should throw access denied when no session is present',
     const userInfoFromJwtServiceStub = stubInterface<UserInfoFromJwtService>()
     const store = new MemorySessionStore()
     const pathname = '/unit-test-user-info'
-    const testSessionId = crs({length: 10})
+    const testSessionId = crs({
+        length: 10
+    })
 
     const userinfo = userInfoMiddleware({
         pathname,
