@@ -17,6 +17,7 @@
         "pretty-json-files": "prettier --write --config .prettierrc tsconfig.build.json tsconfig.json test/helpers/example-openid-configuration.json"
     },
     "publishConfig": {
+        "access": "public",
         "registry": "https://registry.npmjs.org"
     },
     "main": "dist/index.js",
