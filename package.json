@@ -125,7 +125,7 @@
             "test/**/*.test.ts"
         ],
         "cache": true,
-        "concurrency": 4,
+        "concurrency": 1,
         "failFast": false,
         "verbose": true
     }
