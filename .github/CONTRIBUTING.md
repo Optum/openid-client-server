@@ -15,10 +15,10 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 The process described here has several goals:
 
-- Maintain Knack's quality
+- Maintain _openid-client-server_'s quality
 - Fix problems that are important to users
-- Engage the community in working toward the best possible _Knack_
-- Enable a sustainable system for _Knack_'s maintainers to review contributions
+- Engage the community in working toward the best possible _openid-client-server_
+- Enable a sustainable system for _openid-client-server_'s maintainers to review contributions
 
 Please follow these steps to have your contribution considered by the maintainers:
 
