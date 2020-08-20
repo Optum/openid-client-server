@@ -190,7 +190,15 @@ export const pathFromReferer = (referer: string): string => {
 export const executeRequest = async (
     executeParams: ExecuteProxyRequestParams
 ): Promise<void> => {
-    const {token, excludeCookie, host, pathname, ctx, method} = executeParams
+    const {
+        token,
+        excludeCookie,
+        excludeOriginHeaders,
+        host,
+        pathname,
+        ctx,
+        method
+    } = executeParams
     const {headers} = ctx.req
     const {path} = ctx.url
     let body = ''
@@ -205,7 +213,11 @@ export const executeRequest = async (
         body = await parseBody(ctx.req)
     }
 
-    const reqHeaders = clone(headers)
+    let reqHeaders = clone(headers)
+
+    if (excludeOriginHeaders) {
+        reqHeaders = {}
+    }
 
     reqHeaders.authorization = `Bearer ${token}`
 

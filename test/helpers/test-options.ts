@@ -38,6 +38,7 @@ export const testOptions: Options = {
         proxyPaths: [],
         proxyHosts: [],
         excludeCookie: [],
+        excludeOriginHeaders: [],
         useIdToken: []
     }
 }
@@ -56,6 +57,7 @@ export const testOptionsWithProxy: Options = {
         proxyPaths: ['/proxy'],
         proxyHosts: ['https://host.test'],
         excludeCookie: [false],
+        excludeOriginHeaders: [false],
         useIdToken: [false]
     }
 }

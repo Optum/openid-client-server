@@ -23,6 +23,7 @@ export interface ProxyParams {
     host: string
     pathname: string
     excludeCookie: boolean
+    excludeOriginHeaders: boolean
     useIdToken: boolean
     sessionStore: SessionStore
     client: Client
@@ -31,6 +32,7 @@ export interface ProxyParams {
 export interface ExecuteProxyRequestParams {
     token: string
     excludeCookie: boolean
+    excludeOriginHeaders: boolean
     host: string
     pathname: string
     ctx: Context

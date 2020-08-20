@@ -20,12 +20,14 @@ test('proxyMiddlware should throw access denied when no refresh token is present
     const host = 'http://unit-test:0000'
     const pathname = '/unit-test-proxy'
     const excludeCookie = false
+    const excludeOriginHeaders = false
     const useIdToken = false
 
     const proxy = proxyMiddleware({
         host,
         pathname,
         excludeCookie,
+        excludeOriginHeaders,
         useIdToken,
         sessionStore: store,
         client: clientStub

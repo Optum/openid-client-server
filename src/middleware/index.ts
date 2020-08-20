@@ -113,10 +113,15 @@ export const createMiddleware = (
 
     if (proxyOptions.proxyPaths.length === proxyOptions.proxyHosts.length) {
         let excludeCookie = false
+        let excludeOriginHeaders = false
         let useIdToken = false
         const includeCookieFlag = proxyOptions.excludeCookie
             ? proxyOptions.proxyPaths.length ===
               proxyOptions.excludeCookie.length
+            : false
+        const includeOriginHeadersFlag = proxyOptions.excludeOriginHeaders
+            ? proxyOptions.proxyPaths.length ===
+              proxyOptions.excludeOriginHeaders.length
             : false
         const includeUseIdTokenFlag = proxyOptions.excludeCookie
             ? proxyOptions.proxyPaths.length ===
@@ -130,6 +135,10 @@ export const createMiddleware = (
                 excludeCookie = proxyOptions.excludeCookie[i]
             }
 
+            if (includeOriginHeadersFlag) {
+                excludeOriginHeaders = proxyOptions.excludeOriginHeaders[i]
+            }
+
             if (includeUseIdTokenFlag) {
                 useIdToken = proxyOptions.useIdToken[i]
             }
@@ -140,6 +149,7 @@ export const createMiddleware = (
                         host: proxyHost,
                         pathname: proxyPath,
                         excludeCookie,
+                        excludeOriginHeaders,
                         useIdToken,
                         sessionStore,
                         client
