@@ -8,7 +8,7 @@ OPENID_REDIRECT_URIS=http://localhost:8080/openid/callback
 OPENID_SESSION_KEYS=<session_key>
 
 # Client Server Options
-OPENID_DISCOVERY_ENDPOINT=https://login.microsoftonline.com/db05faca-c82a-4b9d-b9c5-0f64b6755421/v2.0/.well-known/openid-configuration
+OPENID_DISCOVERY_ENDPOINT=https://login.microsoftonline.com/<tenantid>/v2.0/.well-known/openid-configuration
 OPENID_SCOPE=openid profile email offline_access
 
 # Proxy Options
