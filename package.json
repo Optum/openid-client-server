@@ -14,7 +14,8 @@
         "postlint": "yarn pretty-json-files",
         "type-check": "tsc -p tsconfig.json --noEmit",
         "clean": "rimraf coverage dist .nyc_output",
-        "pretty-json-files": "prettier --write --config .prettierrc tsconfig.build.json tsconfig.json test/helpers/example-openid-configuration.json"
+        "pretty-json-files": "prettier --write --config .prettierrc tsconfig.build.json tsconfig.json test/helpers/example-openid-configuration.json",
+        "release": "release-it --no-npm.publish"
     },
     "publishConfig": {
         "access": "public",
@@ -63,6 +64,7 @@
         "nyc": "^15.0.0",
         "p-event": "^4.1.0",
         "prettier": "^2.0.5",
+        "release-it": "^13.6.8",
         "rimraf": "^3.0.2",
         "ts-node": "^8.6.2",
         "ts-sinon": "^1.0.25",
