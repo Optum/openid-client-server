@@ -20,6 +20,8 @@ test('proxyMiddlware should refresh token when expired and execute request', asy
     const testHost = 'http://unit-test:0000'
     const testPathname = '/unit-test-proxy'
     const testExcludeCookie = false
+    const testExcludeOriginHeaders = false
+
     const testUseIdToken = false
     const testRefreshToken = 'test-refresh-token'
     const testAccessToken = 'test-access-token'
@@ -38,6 +40,7 @@ test('proxyMiddlware should refresh token when expired and execute request', asy
         host: testHost,
         pathname: testPathname,
         excludeCookie: testExcludeCookie,
+        excludeOriginHeaders: testExcludeOriginHeaders,
         useIdToken: testUseIdToken,
         sessionStore: store,
         client: clientStub

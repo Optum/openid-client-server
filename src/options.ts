@@ -35,6 +35,7 @@ export interface ProxyOptions {
     proxyHosts: string[]
     excludeCookie: boolean[]
     useIdToken: boolean[]
+    excludeOriginHeaders: boolean[]
 }
 
 export interface Options {
@@ -370,6 +371,13 @@ const proxyOptionsEnvMapItems: EnvMapItem[] = [
     {
         propKey: 'useIdToken',
         envKey: 'OPENID_PROXY_USE_ID_TOKEN',
+        defaultValue: [false],
+        required: false,
+        skipIfNotRequired: true
+    },
+    {
+        propKey: 'excludeOriginHeaders',
+        envKey: 'OPENID_PROXY_EXCLUDE_ORIGIN_HEADERS',
         defaultValue: [false],
         required: false,
         skipIfNotRequired: true

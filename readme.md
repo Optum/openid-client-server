@@ -36,7 +36,7 @@ $ npm install @optum/openid-client-server
 with yarn
 
 ```console
-$ yarn add @ooptum/openid-client-server
+$ yarn add @optum/openid-client-server
 ```
 
 ## Usage

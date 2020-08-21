@@ -11,6 +11,7 @@ export const proxyMiddleware = (
         host,
         pathname,
         excludeCookie,
+        excludeOriginHeaders,
         useIdToken,
         sessionStore,
         client
@@ -80,6 +81,7 @@ export const proxyMiddleware = (
             await executeRequest({
                 token,
                 excludeCookie,
+                excludeOriginHeaders,
                 host,
                 pathname,
                 ctx,

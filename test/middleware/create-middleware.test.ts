@@ -33,6 +33,7 @@ test('createMiddleware should initialize a Pipeline without proxy paths as expec
         proxyPaths: [],
         proxyHosts: [],
         excludeCookie: [],
+        excludeOriginHeaders: [],
         useIdToken: []
     }
 
