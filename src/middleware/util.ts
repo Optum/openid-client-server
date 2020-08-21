@@ -16,13 +16,14 @@ import {URL, UrlWithParsedQuery} from 'url'
 import fetch, {Headers} from 'node-fetch'
 
 import {Context} from '../context'
-import {ErrorResponse} from '../status'
+import {DefaultErrorResponse, ErrorResponse} from '../status'
 import {Json} from '../json'
 import {Options} from '../options'
 import {UserinfoResponse} from 'openid-client'
 import jwksClient from 'jwks-rsa'
 
 export const clone = (json: any): any => JSON.parse(JSON.stringify(json))
+const {status_code: defaultErrorResponseStatusCode} = DefaultErrorResponse
 
 export const redirectResponse = (
     location: string,
@@ -229,16 +230,25 @@ export const executeRequest = async (
 
     ctx.log.debug(`fetching ${requestUrl}`)
 
-    const response = await fetch(requestUrl, {
-        method: normalizedMethod,
-        headers: reqHeaders as Headers,
-        body: includeBody ? body : undefined
-    })
+    try {
+        const response = await fetch(requestUrl, {
+            method: normalizedMethod,
+            headers: reqHeaders as Headers,
+            body: includeBody ? body : undefined
+        })
 
-    sendResponse(
-        response.status,
-        response.headers,
-        await response.text(),
-        ctx.res
-    )
+        sendResponse(
+            response.status,
+            response.headers,
+            await response.text(),
+            ctx.res
+        )
+    } catch (error) {
+        ctx.log.error('Error sending proxy request', error)
+        sendJsonResponse(
+            defaultErrorResponseStatusCode,
+            DefaultErrorResponse,
+            ctx.res
+        )
+    }
 }
