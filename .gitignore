@@ -63,3 +63,5 @@ examples/nextjs/server
 examples/static/server
 
 examples/static-gh/server
+
+.envrc
