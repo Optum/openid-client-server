@@ -103,7 +103,7 @@ The original goal of this module was to provide as easy way to implement OpenID 
         "editor.defaultFormatter": "samverschueren.linter-xo"
     },
     "[json]": {
-        "editor.defaultFormatter": "euskadi31.json-pretty-printer"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     }
 }
 ```
