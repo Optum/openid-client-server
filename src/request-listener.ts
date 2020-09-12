@@ -19,14 +19,16 @@ export const RequestListenerEvents = {
 
 export const RequestListenerEventEmitter = new EventEmitter()
 
+export type ContentHandler = (
+    req: IncomingMessage,
+    res: ServerResponse,
+    parsedUrl?: UrlWithParsedQuery | undefined
+) => Promise<void>
+
 export const createRequestListener = async (
     options: Options,
     sessionStore: SessionStore,
-    requestHandler?: (
-        req: IncomingMessage,
-        res: ServerResponse,
-        parsedUrl?: UrlWithParsedQuery | undefined
-    ) => Promise<void>
+    requestHandler?: ContentHandler
 ): Promise<RequestListener> => {
     const {
         clientServerOptions: {discoveryEndpoint, emitEvents},

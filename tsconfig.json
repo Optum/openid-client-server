@@ -4,7 +4,7 @@
         "alwaysStrict": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "isolatedModules": true,
+        "isolatedModules": false,
         "lib": ["ES2019"],
         "module": "commonjs",
         "moduleResolution": "node",

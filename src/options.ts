@@ -3,7 +3,12 @@ import {LoggerOptions} from 'pino'
 
 import {ClientMetadata} from 'openid-client'
 
-export class OptionsError extends Error {}
+export class OptionsError extends Error {
+    constructor(message: string) {
+        super(message)
+        this.name = 'OptionsError'
+    }
+}
 
 export interface ClientServerOptions {
     discoveryEndpoint: string
