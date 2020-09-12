@@ -5,7 +5,7 @@ export {
     SessionOptions,
     resolveOptions
 } from './options'
-export {MemorySessionStore} from './session'
+export {MemorySessionStore, Session, SessionStore} from './session'
 export {
     ContentHandler,
     createRequestListener,
