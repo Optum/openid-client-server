@@ -81,7 +81,6 @@ The original goal of this module was to provide as easy way to implement OpenID 
 
 -   [Linter for XO](https://marketplace.visualstudio.com/items?itemName=samverschueren.linter-xo)
 -   [Prettier - Code Formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
--   [VSC Sort Import](https://marketplace.visualstudio.com/items?itemName=amatiasq.sort-imports)
 
 > settings.json
 
@@ -94,8 +93,6 @@ The original goal of this module was to provide as easy way to implement OpenID 
     "prettier.tabWidth": 4,
     "prettier.singleQuote": true,
     "editor.formatOnSave": true,
-    "sort-imports.on-save": true,
-    "sort-imports.cache-package-json-config-checks": true,
     "[typescriptreact]": {
         "editor.defaultFormatter": "samverschueren.linter-xo"
     },
@@ -106,7 +103,7 @@ The original goal of this module was to provide as easy way to implement OpenID 
         "editor.defaultFormatter": "samverschueren.linter-xo"
     },
     "[json]": {
-        "editor.defaultFormatter": "euskadi31.json-pretty-printer"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     }
 }
 ```

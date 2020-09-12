@@ -3,18 +3,18 @@
     "version": "1.0.4",
     "description": "An OpenId Relying Party (RP, Client) application server.",
     "license": "Apache-2.0",
-    "repository": "optum/openid-client-server",
+    "repository": "https://github.com/optum/openid-client-server",
     "engines": {
         "node": ">=8"
     },
     "scripts": {
-        "build": "xo && rimraf dist && tsc -p tsconfig.build.json",
+        "build": "xo && rimraf dist && tsc -p src/tsconfig.json",
         "test": "xo && nyc ava",
         "lint": "xo --fix",
         "postlint": "yarn pretty-json-files",
         "type-check": "tsc -p tsconfig.json --noEmit",
         "clean": "rimraf coverage dist .nyc_output",
-        "pretty-json-files": "prettier --write --config .prettierrc tsconfig.build.json tsconfig.json test/helpers/example-openid-configuration.json",
+        "pretty-json-files": "prettier --write --config .prettierrc src/tsconfig.json tsconfig.json test/helpers/example-openid-configuration.json",
         "release": "release-it --no-npm.publish"
     },
     "publishConfig": {
@@ -24,10 +24,12 @@
     "main": "dist/index.js",
     "files": [
         "dist",
-        "src"
+        "src/**/*.ts"
     ],
     "keywords": [
-        "openid"
+        "openid",
+        "openid-client",
+        "web-app-server"
     ],
     "dependencies": {
         "cookies": "^0.8.0",
@@ -97,7 +99,21 @@
             "examples"
         ],
         "rules": {
-            "capitalized-comments": 0
+            "capitalized-comments": 0,
+            "sort-imports": [
+                "error",
+                {
+                    "ignoreCase": false,
+                    "ignoreDeclarationSort": true,
+                    "ignoreMemberSort": false,
+                    "memberSyntaxSortOrder": [
+                        "all",
+                        "single",
+                        "multiple",
+                        "none"
+                    ]
+                }
+            ]
         }
     },
     "nyc": {
