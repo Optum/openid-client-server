@@ -47,11 +47,97 @@ The `resolveOptions` function will leverage environmental variables to auto-buil
 
 > For more info see the [.env.example](.env.example) file
 
-### RequestListener
+### clientServer
 
-Use the `createRequestListener` function to create a `http` module RequestListener. It can be required in the server setup module via `import {createRequestListener} from '@optum/openid-client-server`.
+Use the `clientServer` function to create a `http` server with an integrated [openid-client](https://www.npmjs.com/package/openid-client) and all features in [@optum/openid-client-server](https://www.npmjs.com/package/@optum/openid-client-server).
 
-> For more info see the [examples](examples) folder
+> With a Promise
+
+```ts
+import {IncomingMessage, ServerResponse} from 'http'
+import {clientServer} from '@optum/openid-client-server'
+
+import handle from 'serve-handler'
+
+const port = parseInt(process.env.NEXT_SERVER_PORT ?? '8080', 10)
+
+const serveHandler = async (
+    req: IncomingMessage,
+    res: ServerResponse
+): Promise<void> => {
+    handle(req, res, {
+        headers: [
+            {
+                source: '**/*.*',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'max-age=0'
+                    }
+                ]
+            }
+        ]
+    })
+}
+
+clientServer({
+    contentHandler: serveHandler
+})
+    .then(server =>
+        server.listen(port, () => {
+            console.log(`> Ready on http://localhost:${port}`)
+        })
+    )
+    .catch(error => {
+        console.log('Static content server failed to start')
+        console.error(error)
+    })
+```
+
+> With a Async Await
+
+```ts
+import {IncomingMessage, ServerResponse} from 'http'
+import {clientServer} from '@optum/openid-client-server'
+
+import handle from 'serve-handler'
+
+const port = parseInt(process.env.NEXT_SERVER_PORT ?? '8080', 10)
+
+;(async (): Promise<void> => {
+    try {
+        const serveHandler = async (
+            req: IncomingMessage,
+            res: ServerResponse
+        ): Promise<void> => {
+            handle(req, res, {
+                headers: [
+                    {
+                        source: '**/*.*',
+                        headers: [
+                            {
+                                key: 'Cache-Control',
+                                value: 'max-age=0'
+                            }
+                        ]
+                    }
+                ]
+            })
+        }
+
+        const server = await clientServer({contentHandler: serveHandler})
+
+        server.listen(port, () => {
+            console.log(`> Ready on http://localhost:${port}`)
+        })
+    } catch (error) {
+        console.log('Static content server failed to start')
+        console.error(error)
+    }
+})()
+```
+
+> For a [Next.js](https://nextjs.org/) example, see: [examples/nextjs](./examples/nextjs) file
 
 ## Background
 
