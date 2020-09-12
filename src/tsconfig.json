@@ -16,10 +16,10 @@
         "skipLibCheck": true,
         "strict": true,
         "target": "ES2019",
-        "outDir": "dist",
+        "outDir": "../dist",
         "declaration": true,
         "sourceMap": true
     },
     "exclude": ["node_modules"],
-    "include": ["src/**/*.ts"]
+    "include": ["**/*.ts"]
 }
