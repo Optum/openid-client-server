@@ -1,5 +1,5 @@
 module.exports = {
     someSidebar: {
-        Docusaurus: ["install", "getting-started"],
+        Docusaurus: ["install", "getting-started", "nextjs-example"],
     },
 };

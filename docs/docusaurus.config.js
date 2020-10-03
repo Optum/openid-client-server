@@ -42,6 +42,10 @@ module.exports = {
                             label: "Getting Started",
                             to: "docs/getting-started",
                         },
+                        {
+                            label: "NextJS Example",
+                            to: "docs/nextjs-example",
+                        },
                     ],
                 },
                 {
