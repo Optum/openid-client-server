@@ -7,9 +7,7 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": false,
-        "lib": [
-            "ES2018"
-        ],
+        "lib": ["ES2018"],
         "module": "commonjs",
         "moduleResolution": "node",
         "noEmit": true,
@@ -22,19 +20,8 @@
         "sourceMap": true,
         "strict": true,
         "target": "ES2018",
-        "types": [
-            "intern",
-            "node"
-        ]
+        "types": ["intern", "node"]
     },
-    "exclude": [
-        "docs",
-        "node_modules"
-    ],
-    "include": [
-        "src/*.ts",
-        "src/**/*.ts",
-        "test/*.ts",
-        "test/**/*.ts"
-    ]
+    "exclude": ["docs", "rig", "node_modules"],
+    "include": ["src/*.ts", "src/**/*.ts", "test/*.ts", "test/**/*.ts"]
 }

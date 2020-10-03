@@ -34,7 +34,7 @@ export function userinfo(
         }
 
         const userinfo = await service.client.userinfo(tokenSet)
-        return reply.status(200).send(userinfo)
+        return reply.status(200).send({...userinfo, retrieved_at: Date.now()})
     })
 }
 

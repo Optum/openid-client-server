@@ -2,16 +2,29 @@ import {FastifyInstance, HookHandlerDoneFunction} from 'fastify'
 import fp from 'fastify-plugin'
 import sensible from 'fastify-sensible'
 import proxy from 'fastify-http-proxy'
+import Ajv from 'ajv'
 import {OCSOptions} from './types'
 import {OpenIdClientService} from './service'
 import session from './plugins/session'
 import register from './services'
+import options_schema from './options-schema.json'
 
 function openIdClientServer(
     fastify: FastifyInstance,
     options: OCSOptions,
     done: HookHandlerDoneFunction
 ): void {
+    const validate = new Ajv({allErrors: true}).compile(options_schema)
+    const isValid = validate(options)
+
+    if (
+        !isValid &&
+        Array.isArray(validate.errors) &&
+        validate.errors.length !== 0
+    ) {
+        throw validate.errors
+    }
+
     const service = new OpenIdClientService(fastify, options)
     service
         .init()
@@ -57,6 +70,6 @@ function openIdClientServer(
 }
 
 export default fp(openIdClientServer, {
-    fastify: '>=1.0.0',
+    fastify: '>=3.0.0',
     name: 'fastify-openid-client-server'
 })

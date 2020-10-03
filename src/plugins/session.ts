@@ -1,6 +1,5 @@
 import {FastifyInstance, HookHandlerDoneFunction} from 'fastify'
 import fp from 'fastify-plugin'
-import assert from 'assert'
 import {
     ISession,
     ISessionStore,
@@ -58,24 +57,6 @@ function openIdClientSession(
     options: OCSOptions,
     done: HookHandlerDoneFunction
 ): void {
-    assert(options.sessionOptions, 'OCSOptions sessionOptions must be set.')
-    assert(
-        options.sessionOptions.sessionName,
-        'OCSSessionOptions sessionName must be set.'
-    )
-    assert(
-        options.sessionOptions.sessionKeys,
-        'OCSSessionOptions sessionKeys must be set.'
-    )
-    assert(
-        options.sessionOptions.sessionKeys.length !== 0,
-        'OCSSessionOptions sessionKeys.length must be at least 1.'
-    )
-    assert(
-        options.sessionOptions.sameSite,
-        'OCSSessionOptions sameSite must be set.'
-    )
-
     const sessionStore: ISessionStore =
         options.sessionStore ?? new MemorySessionStore()
 
@@ -117,6 +98,6 @@ function openIdClientSession(
 }
 
 export default fp(openIdClientSession, {
-    fastify: '>=1.0.0',
+    fastify: '>=3.0.0',
     name: 'fastify-openid-client-server-session'
 })

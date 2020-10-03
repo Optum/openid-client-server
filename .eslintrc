@@ -6,9 +6,7 @@
     "env": {
         "es6": true
     },
-    "plugins": [
-        "prettier"
-    ],
+    "plugins": ["prettier"],
     "extends": [
         "plugin:prettier/recommended",
         "plugin:@typescript-eslint/recommended",
@@ -59,12 +57,7 @@
                 "ignoreCase": false,
                 "ignoreDeclarationSort": true,
                 "ignoreMemberSort": false,
-                "memberSyntaxSortOrder": [
-                    "all",
-                    "single",
-                    "multiple",
-                    "none"
-                ]
+                "memberSyntaxSortOrder": ["all", "single", "multiple", "none"]
             }
         ]
     }
