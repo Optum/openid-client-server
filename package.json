@@ -20,11 +20,12 @@
         }
     ],
     "scripts": {
-        "build": "eslint \"src/**/*.ts\" && rimraf dist && tsc -p src/tsconfig.json",
+        "build": "eslint \"src/**/*.ts\" && tsc -p src/tsconfig.json",
         "dev": "nodemon --exec ./run.sh",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "release": "release-it --no-npm.publish",
-        "test": "cross-env TS_NODE_FILES=true intern"
+        "test": "cross-env TS_NODE_FILES=true intern",
+        "clean": "rimraf dist rig/app/.next coverage"
     },
     "publishConfig": {
         "access": "public",

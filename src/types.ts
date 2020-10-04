@@ -75,5 +75,5 @@ export type OCSOptions = {
     sessionFactory?: ISessionFactory
     sessionStore?: ISessionStore
     proxyOptions?: OCSProxyOptions[]
-    securedPaths?: string[]
+    allowedPaths?: string[]
 }

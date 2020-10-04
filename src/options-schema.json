@@ -9,6 +9,10 @@
             "maximum": 1,
             "description": "The numeric form of the AppType enum value."
         },
+        "allowedPaths": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1}
+        },
         "issuer": {"type": "string", "format": "uri"},
         "clientMetadata": {
             "type": "object",

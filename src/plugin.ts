@@ -40,6 +40,14 @@ function openIdClientServer(
                 })
             }
 
+            fastify.get('/books', {schema: {}}, async (request, reply) => {
+                const tokenSet = await request.session.get('tokenSet')
+                if (!tokenSet) {
+                    reply.redirect(302, '/openid/signin')
+                    reply.sent = true
+                }
+            })
+
             // register all openid services
             register(fastify, options, service)
 
