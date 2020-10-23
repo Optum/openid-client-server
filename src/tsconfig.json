@@ -7,9 +7,7 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": false,
-        "lib": [
-            "ES2018"
-        ],
+        "lib": ["ES2018"],
         "module": "commonjs",
         "moduleResolution": "node",
         "noEmit": false,
@@ -17,21 +15,13 @@
         "noImplicitAny": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "outDir": "../dist",
         "resolveJsonModule": true,
         "skipLibCheck": true,
         "sourceMap": true,
         "strict": true,
         "target": "ES2018",
-        "types": [
-            "node"
-        ]
+        "types": ["node"],
+        "outDir": "../dist"
     },
-    "exclude": [
-        "node_modules"
-    ],
-    "include": [
-        "*.ts",
-        "**/*.ts"
-    ]
+    "include": ["*.ts", "**/*.ts"]
 }

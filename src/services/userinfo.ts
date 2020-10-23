@@ -1,33 +1,36 @@
-import {FastifyInstance} from 'fastify'
-import {OCSOptions} from '../types'
-import {OpenIdClientService} from '../service'
+import {FastifyReply, FastifyRequest} from 'fastify'
+import {ClientService} from '../types'
 import {TokenSet} from 'openid-client'
+import http from 'http'
 
-export function userinfo(
-    fastify: FastifyInstance,
-    _: OCSOptions,
-    service: OpenIdClientService
-): void {
-    fastify.get('/openid/userinfo', async function (
-        request,
-        reply
+const ErrorResponses = {
+    unauthorized: {
+        statusCode: 401,
+        message: http.STATUS_CODES[401]
+    }
+}
+
+export default function make(service: ClientService) {
+    return async function (
+        request: FastifyRequest,
+        reply: FastifyReply
     ): Promise<void> {
-        let tokenSet: TokenSet = (await request.session.get(
-            'tokenSet'
-        )) as TokenSet
+        const tokenSetJson = request.session.get('tokenSet')
 
-        if (!tokenSet) {
-            return reply.unauthorized()
+        if (!tokenSetJson) {
+            return reply.status(401).send(ErrorResponses.unauthorized)
         }
+
+        let tokenSet = new TokenSet(tokenSetJson)
 
         if (tokenSet.expired()) {
             if (!tokenSet.refresh_token) {
-                return reply.unauthorized()
+                return reply.status(401).send(ErrorResponses.unauthorized)
             }
 
             tokenSet = await service.client.refresh(tokenSet)
 
-            await request.session.set('tokenSet', tokenSet)
+            request.session.set('tokenSet', tokenSet)
 
             const userinfo = await service.client.userinfo(tokenSet)
             return reply.status(200).send(userinfo)
@@ -35,7 +38,5 @@ export function userinfo(
 
         const userinfo = await service.client.userinfo(tokenSet)
         return reply.status(200).send({...userinfo, retrieved_at: Date.now()})
-    })
+    }
 }
-
-export default userinfo

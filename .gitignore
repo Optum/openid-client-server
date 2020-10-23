@@ -56,9 +56,11 @@ typings/
 node_modules
 
 coverage
-rig/app/.next
+harness/app/.next
 
 # compiled server output
 dist
 .envrc
 .env
+
+secret-session-key

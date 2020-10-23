@@ -1,12 +1,21 @@
-import {FastifyInstance} from 'fastify'
+import {FastifyReply, FastifyRequest} from 'fastify'
+import http from 'http'
 
-export function error(fastify: FastifyInstance): void {
-    fastify.get('/openid/error', async function (
-        _request,
-        reply
-    ): Promise<void> {
-        return reply.status(200).send(fastify.httpErrors.internalServerError())
-    })
+const ErrorResponses = {
+    internalServerError: {
+        statusCode: 500,
+        message: http.STATUS_CODES[500]
+    }
 }
 
-export default error
+const makeAwait = async (): Promise<void> => Promise.resolve()
+
+export default function make() {
+    return async function (
+        _request: FastifyRequest,
+        reply: FastifyReply
+    ): Promise<void> {
+        await makeAwait()
+        return reply.status(200).send(ErrorResponses.internalServerError)
+    }
+}

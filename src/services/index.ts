@@ -1,21 +1,63 @@
-import {FastifyInstance} from 'fastify'
-import {OCSOptions} from '../types'
-import {OpenIdClientService} from '../service'
+import {FastifyInstance, HookHandlerDoneFunction} from 'fastify'
+import {OpenIdRoutes, Options} from '../types'
+import makeErrorHandler from './error'
+import makeSigninHandler from './signin'
+import makeSignoutHandler from './signout'
+import makeUserinfoHandler from './userinfo'
+import makeCallbackHandler from './callback'
 
-import {callback} from './callback'
-import {error} from './error'
-import {signin} from './signin'
-import {signout} from './signout'
-import {userinfo} from './userinfo'
+const optionRouteOrDefault = (
+    openidRoutes: OpenIdRoutes | undefined,
+    optionKey: keyof OpenIdRoutes,
+    defaultRoute: string
+): string => {
+    if (openidRoutes) {
+        const customRoute = openidRoutes[optionKey]
+
+        if (!customRoute) {
+            return defaultRoute
+        }
+
+        return customRoute
+    }
+
+    return defaultRoute
+}
 
 export default function register(
     fastify: FastifyInstance,
-    options: OCSOptions,
-    service: OpenIdClientService
+    options: Options,
+    done: HookHandlerDoneFunction
 ): void {
-    callback(fastify, options, service)
-    error(fastify)
-    signin(fastify, options, service)
-    signout(fastify, options)
-    userinfo(fastify, options, service)
+    const {openidRoutes, service} = options
+
+    const defaultRouteOptions = {schema: {}}
+
+    fastify.get(
+        optionRouteOrDefault(openidRoutes, 'error', '/openid/error'),
+        defaultRouteOptions,
+        makeErrorHandler()
+    )
+    fastify.get(
+        optionRouteOrDefault(openidRoutes, 'signin', '/openid/signin'),
+        defaultRouteOptions,
+        makeSigninHandler(service, options)
+    )
+    fastify.get(
+        optionRouteOrDefault(openidRoutes, 'signout', '/openid/signout'),
+        defaultRouteOptions,
+        makeSignoutHandler(options)
+    )
+    fastify.get(
+        optionRouteOrDefault(openidRoutes, 'userinfo', '/openid/userinfo'),
+        defaultRouteOptions,
+        makeUserinfoHandler(service)
+    )
+    fastify.get(
+        optionRouteOrDefault(openidRoutes, 'callback', '/openid/callback'),
+        defaultRouteOptions,
+        makeCallbackHandler(service)
+    )
+
+    done()
 }

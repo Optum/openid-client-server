@@ -1,16 +1,15 @@
 {
     "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "project": "tsconfig.json"
-    },
     "env": {
         "es6": true
     },
-    "plugins": ["prettier"],
+    "plugins": ["prettier", "promise", "sonarjs", "unicorn"],
     "extends": [
         "plugin:prettier/recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:unicorn/recommended"
+        "plugin:unicorn/recommended",
+        "plugin:sonarjs/recommended",
+        "plugin:promise/recommended"
     ],
     "rules": {
         "prettier/prettier": [

@@ -1,10 +1,10 @@
-import plugin from '../src'
+import * as ocs from '../src'
 
 const {describe, it} = intern.getPlugin('interface.bdd')
 const {expect} = intern.getPlugin('chai')
 
-describe('ocs plugin', () => {
-    it('should be defined as default module', () => {
-        expect(plugin).to.not.be.undefined
+describe('ocs module', () => {
+    it('should be defined', () => {
+        expect(ocs).to.not.be.undefined
     })
 })

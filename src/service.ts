@@ -1,22 +1,28 @@
 import {FastifyInstance, FastifyRequest} from 'fastify'
 import {Client, Issuer, TokenSet, generators} from 'openid-client'
 import {head} from 'ramda'
-import {
-    ChallengeArguments,
-    ContentHandler,
-    OCSOptions,
-    OCSProxyOptions
-} from './types'
 import {default_code_challenge_method} from './constants'
 import assert from 'assert'
+import {
+    ClientService,
+    ContentHandler,
+    FastifyContentHandler,
+    Options,
+    ProxyOptions
+} from './types'
+import {withFastifyWrapper} from './util'
 
-export class OpenIdClientService {
+export class OpenIdClientService implements ClientService {
+    // ctor initialized fields
     fastify: FastifyInstance
-    options: OCSOptions
+    options: Options
     name: string
-    _client: Client | undefined
 
-    constructor(fastify: FastifyInstance, options: OCSOptions) {
+    // internal fields
+    _client: Client | undefined
+    _contentHandler: ContentHandler | undefined
+
+    constructor(fastify: FastifyInstance, options: Options) {
         this.fastify = fastify
         this.options = options
         this.name = 'OpenIdClientService'
@@ -25,18 +31,29 @@ export class OpenIdClientService {
     get client(): Client {
         assert(
             this._client,
-            `${this.name}::init must be resolved before calling getTokenSet`
+            `${this.name}::init must be resolved before calling client`
         )
         return this._client
     }
 
-    async init(): Promise<{contentHandler: ContentHandler; client: Client}> {
+    get contentHandler(): ContentHandler {
+        assert(
+            this._contentHandler,
+            `${this.name}::init must be resolved before calling contentHandler`
+        )
+        return this._contentHandler
+    }
+
+    async init(): Promise<{
+        client: Client
+        contentHandler: FastifyContentHandler
+    }> {
         const {clientMetadata, issuer, resolveContentHandler} = this.options
-        const contentHandler = await resolveContentHandler()
+        this._contentHandler = await resolveContentHandler()
         const issuerClient = await Issuer.discover(issuer)
         this._client = new issuerClient.Client(clientMetadata)
         return {
-            contentHandler,
+            contentHandler: withFastifyWrapper(this._contentHandler),
             client: this._client
         }
     }
@@ -46,28 +63,26 @@ export class OpenIdClientService {
         codeVerifier: string,
         request: FastifyRequest
     ): Promise<TokenSet> {
-        const redirectUri = head<string>(
-            this.client.metadata.redirect_uris ?? ['']
-        )
+        const redirectUri = head(this.client.metadata.redirect_uris || [''])
         const callbackParameters = this.client.callbackParams(request.raw)
-        if (this.options.scope.includes('openid')) {
-            return await this.client.callback(redirectUri, callbackParameters, {
-                state: csrfString,
-                code_verifier: codeVerifier
-            })
-        } else {
-            return await this.client.oauthCallback(
-                redirectUri,
-                callbackParameters,
-                {
-                    state: csrfString,
-                    code_verifier: codeVerifier
-                }
-            )
-        }
+        return await (this.options.scope?.includes('openid')
+            ? this.client.callback(redirectUri, callbackParameters, {
+                  state: csrfString,
+                  code_verifier: codeVerifier
+              })
+            : this.client.oauthCallback(redirectUri, callbackParameters, {
+                  state: csrfString,
+                  code_verifier: codeVerifier
+              }))
     }
 
-    getChallengeArguments(): Partial<ChallengeArguments> {
+    getChallengeArguments():
+        | {
+              code_verifier: string
+              code_challenge: string
+              code_challenge_method: string
+          }
+        | {code_verifier?: string} {
         if (this.options.enableCodeChallenge) {
             const code_verifier = generators.codeVerifier()
             const code_challenge = generators.codeChallenge(code_verifier)
@@ -85,16 +100,15 @@ export class OpenIdClientService {
     }
 
     addInAuthorizationHeader(
-        proxyOptions: OCSProxyOptions
+        proxyOptions: ProxyOptions
     ): (request: FastifyRequest) => Promise<void> {
-        const client = this.client
+        const _client = this.client
         return async function (request: FastifyRequest): Promise<void> {
-            let tokenSet: TokenSet = (await request.session.get(
-                'tokenSet'
-            )) as TokenSet
+            const _tokenSet = await request.session.get('tokenSet')
+            let tokenSet = new TokenSet(_tokenSet)
             if (!request.headers.authorization && tokenSet) {
                 if (tokenSet.expired() && tokenSet.refresh_token) {
-                    tokenSet = await client.refresh(tokenSet)
+                    tokenSet = await _client.refresh(tokenSet)
                     await request.session.set('tokenSet', tokenSet)
                 }
                 request.headers.authorization = `Bearer ${
@@ -106,3 +120,5 @@ export class OpenIdClientService {
         }
     }
 }
+
+export default OpenIdClientService

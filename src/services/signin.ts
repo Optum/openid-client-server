@@ -1,18 +1,11 @@
-import {FastifyInstance} from 'fastify'
+import {FastifyReply, FastifyRequest} from 'fastify'
 import crs from 'crypto-random-string'
-import {OCSOptions} from '../types'
-import {OpenIdClientService} from '../service'
+import {ClientService, Options} from '../types'
 
-export function signin(
-    fastify: FastifyInstance,
-    options: OCSOptions,
-    service: OpenIdClientService
-): void {
-    const {scope} = options
-
-    fastify.get('/openid/signin', async function (
-        request,
-        reply
+export default function make(service: ClientService, {scope}: Options) {
+    return async function (
+        request: FastifyRequest,
+        reply: FastifyReply
     ): Promise<void> {
         const state = crs({
             length: 32
@@ -28,17 +21,23 @@ export function signin(
             ...restOfChallenge
         })
 
-        const fromUrl = request.headers.referer ?? '/'
+        const fromUrl = request.headers.referer || '/'
+        let fromProtected = await request.session.get('fromProtected')
+
+        if (typeof fromProtected === 'string') {
+            fromProtected = fromProtected === 'true'
+        }
 
         await request.session.set('csrfString', state)
-        await request.session.set('fromUrl', fromUrl)
+
+        await (fromProtected
+            ? request.session.set('fromProtected', false)
+            : request.session.set('fromUrl', fromUrl))
 
         if (code_verifier) {
             await request.session.set('codeVerifier', code_verifier)
         }
 
         return reply.redirect(authUrl)
-    })
+    }
 }
-
-export default signin

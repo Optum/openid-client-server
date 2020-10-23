@@ -1,83 +1,67 @@
-import {FastifyInstance, HookHandlerDoneFunction} from 'fastify'
-import fp from 'fastify-plugin'
-import sensible from 'fastify-sensible'
+import {FastifyInstance} from 'fastify'
+import secureSession from 'fastify-secure-session'
 import proxy from 'fastify-http-proxy'
-import Ajv from 'ajv'
-import {OCSOptions} from './types'
 import {OpenIdClientService} from './service'
-import session from './plugins/session'
-import register from './services'
-import options_schema from './options-schema.json'
+import services from './services'
+import {AppType, Options} from './types'
+import {validate as validateOptions} from './options'
+import {isSecuredFactory, toRegexPaths} from './is-secured'
+import {hasOneOrMore} from './util'
 
-function openIdClientServer(
+export default async function plugin(
     fastify: FastifyInstance,
-    options: OCSOptions,
-    done: HookHandlerDoneFunction
-): void {
-    const validate = new Ajv({allErrors: true}).compile(options_schema)
-    const isValid = validate(options)
+    options: Options
+): Promise<void> {
+    validateOptions(options)
 
-    if (
-        !isValid &&
-        Array.isArray(validate.errors) &&
-        validate.errors.length !== 0
-    ) {
-        throw validate.errors
-    }
+    const {appType, securedPaths, sessionOptions} = options
 
     const service = new OpenIdClientService(fastify, options)
-    service
-        .init()
-        .then(({contentHandler}) => {
-            fastify.register(sensible)
-            fastify.register(session, options)
+    options.service = service
 
-            if (options.dev) {
-                fastify.get('/_next/*', async (request, reply) => {
-                    return contentHandler(request.raw, reply.raw).then(() => {
-                        reply.sent = true
-                    })
-                })
+    const {contentHandler} = await service.init()
+
+    fastify.register(secureSession, sessionOptions)
+
+    if (
+        securedPaths &&
+        securedPaths.securedPaths &&
+        hasOneOrMore(securedPaths.securedPaths)
+    ) {
+        const isSecured = isSecuredFactory(
+            toRegexPaths(securedPaths.securedPaths),
+            appType
+        )
+        fastify.addHook('onRequest', async (request, reply) => {
+            const {url} = request.raw
+            const tokenSet = await request.session.get('tokenSet')
+            if (!tokenSet && url && isSecured(url)) {
+                request.session.set('fromUrl', url)
+                request.session.set('fromProtected', true)
+                reply.redirect('/openid/signin')
+                reply.sent = true
             }
-
-            fastify.get('/books', {schema: {}}, async (request, reply) => {
-                const tokenSet = await request.session.get('tokenSet')
-                if (!tokenSet) {
-                    reply.redirect(302, '/openid/signin')
-                    reply.sent = true
-                }
-            })
-
-            // register all openid services
-            register(fastify, options, service)
-
-            // register proxy options if they were provided
-            if (options.proxyOptions) {
-                options.proxyOptions.forEach(proxyOptions => {
-                    fastify.register(
-                        proxy,
-                        Object.assign(proxyOptions, {
-                            preHandler: service.addInAuthorizationHeader(
-                                proxyOptions
-                            )
-                        })
-                    )
-                })
-            }
-
-            // let the contentHandler handle everything else
-            fastify.all('/*', async function (request, reply): Promise<void> {
-                return contentHandler(request.raw, reply.raw).then(() => {
-                    reply.sent = true
-                })
-            })
-
-            done()
         })
-        .catch(error => done(error))
-}
+    }
 
-export default fp(openIdClientServer, {
-    fastify: '>=3.0.0',
-    name: 'fastify-openid-client-server'
-})
+    if (options.dev && options.appType === AppType.NEXTJS) {
+        fastify.get('/_next/*', contentHandler)
+    }
+
+    fastify.register(services, options)
+
+    // register proxy options if they were provided
+    if (options.proxyOptions) {
+        options.proxyOptions.forEach(proxyOptions => {
+            fastify.register(
+                proxy,
+                Object.assign(proxyOptions, {
+                    preHandler: service.addInAuthorizationHeader(proxyOptions)
+                })
+            )
+        })
+    }
+
+    // let the contentHandler handle everything else
+    fastify.all('/*', contentHandler)
+}

@@ -1,79 +1,82 @@
 import {IncomingMessage, ServerResponse} from 'http'
-import {ClientMetadata, TokenSet, UserinfoResponse} from 'openid-client'
-import {FastifyHttpProxyOptions} from 'fastify-http-proxy'
-import {UrlWithParsedQuery} from 'url'
-
-export type ContentHandler = (
-    request: IncomingMessage,
-    res: ServerResponse,
-    parsedUrl?: UrlWithParsedQuery | undefined
-) => Promise<void>
+import {FastifyReply, FastifyRequest} from 'fastify'
+import {Client, TokenSet} from 'openid-client'
+import {SecureSessionPluginOptions} from 'fastify-secure-session'
 
 export enum AppType {
     STATIC = 0,
     NEXTJS
 }
 
-export type ChallengeArguments = {
-    code_challenge: string
-    code_challenge_method: string
-    code_verifier: string
+export interface OpenIdRoutes {
+    userinfo?: string
+    signout?: string
+    signin?: string
+    error?: string
+    callback?: string
+    signedOut?: string
 }
 
-export type ValueOf<T> = T[keyof T]
-
-export type SessionObject = {
-    sessionId: string
-    createdAt: number
-    lastAccessedAt: number
-    csrfString: string
-    codeVerifier: string
-    tokenSet: TokenSet
-    userInfo: UserinfoResponse
-    sessionState: string
-    fromUrl: string
-}
-
-export interface ISession {
-    sessionId: string
-    destroy(): Promise<void>
-    get(key: keyof SessionObject): Promise<ValueOf<SessionObject> | undefined>
-    set(key: keyof SessionObject, value: ValueOf<SessionObject>): Promise<void>
-}
-
-export interface ISessionFactory {
-    createSession(sessionId: string): Promise<ISession> | ISession
-}
-
-export interface ISessionStore {
-    get(key: string): Promise<ISession | undefined> | ISession | undefined
-    set(key: string, value: ISession): Promise<void> | void
-}
-
-export interface OCSProxyOptions extends FastifyHttpProxyOptions {
+export interface ProxyOptions {
+    upstream: string
+    prefix: string
     useIdToken?: boolean
 }
 
-export type OCSSessionOptions = {
-    sessionName: string
-    sessionKeys: string[]
-    sameSite: boolean | 'strict' | 'lax' | 'none' | undefined
-    path?: string
+export type FastifyContentHandler = (
+    request: FastifyRequest,
+    reply: FastifyReply
+) => Promise<void>
+
+export type ContentHandler = (
+    request: IncomingMessage,
+    response: ServerResponse
+) => Promise<void>
+
+export interface ClientService {
+    client: Client
+    init(): Promise<{
+        client: Client
+        contentHandler: FastifyContentHandler
+    }>
+    getTokenSet(
+        csrfString: string,
+        codeVerifier: string,
+        request: FastifyRequest
+    ): Promise<TokenSet>
+    addInAuthorizationHeader(
+        proxyOptions: ProxyOptions
+    ): (request: FastifyRequest) => Promise<void>
+    getChallengeArguments():
+        | {
+              code_verifier: string
+              code_challenge: string
+              code_challenge_method: string
+          }
+        | {code_verifier?: string}
 }
 
-export type OCSOptions = {
-    resolveContentHandler: () => Promise<ContentHandler>
-    appType: AppType
+export interface Options {
     dev?: boolean
-    clientMetadata: ClientMetadata
-    challengeMethod?: string
-    enableCodeChallenge?: boolean
+    appType: AppType
+    clientMetadata: {
+        client_id: string
+        client_secret: string
+        redirect_uris: [string]
+        response_types?: ['code']
+    }
+    openidRoutes?: OpenIdRoutes
+    proxyOptions?: ProxyOptions[]
+    securedPaths?: {
+        securedPaths?: string[]
+        securedAsAllowedPaths?: boolean
+        useStartsWithCompare?: boolean
+    }
     issuer: string
-    scope: string
-    signedOutPage: string
-    sessionOptions: OCSSessionOptions
-    sessionFactory?: ISessionFactory
-    sessionStore?: ISessionStore
-    proxyOptions?: OCSProxyOptions[]
-    allowedPaths?: string[]
+    scope?: string
+    enableCodeChallenge?: boolean
+    challengeMethod?: string
+    sessionOptions: SecureSessionPluginOptions
+    resolveContentHandler(): Promise<ContentHandler>
+    service: ClientService
 }

@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import {useOCS} from './use-ocs'
 
 export const Title = styled.h1`
     font-size: 40px;
@@ -44,6 +45,7 @@ const Link = styled.div`
     }
 `
 
+
 const NavLink = ({href, text}) => {
     return (
         <Link>
@@ -52,7 +54,26 @@ const NavLink = ({href, text}) => {
     )
 }
 
+const firstLetters = value => {
+    if (value) {
+        const parts = value.split(' ')
+        if (parts.length > 1) {
+            return `${parts[0][0].toUpperCase()}${parts[1][0].toUpperCase()}`
+        }
+
+        if (parts.length === 1) {
+            if (parts[0] === 'Guest') {
+                return parts[0]
+            }
+            return parts[0][0].toUpperCase()
+        }
+    }
+
+    return 'A'
+}
+
 export const NavBar = () => {
+    const profile = useOCS()
     return (
         <NavContainer>
             <NavSection>
@@ -60,7 +81,7 @@ export const NavBar = () => {
                 <NavLink href="/books" text="Books" />
             </NavSection>
             <NavSectionRight>
-                <NavLink href="/user" text="User" />
+                <NavLink href="/user" text={firstLetters(profile.name)} />
                 <NavLink href="/openid/signin" text="Signin" />
                 <NavLink href="/openid/signout" text="Signout" />
             </NavSectionRight>

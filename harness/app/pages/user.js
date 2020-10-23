@@ -1,18 +1,14 @@
-import useSWR from 'swr'
 import {JsonViewer, JsonViewerFrame, Page, Title} from '../components'
+import {useOCS} from '../components/use-ocs'
 
 export const User = () => {
-    const {data, error} = useSWR('/openid/userinfo', url =>
-        fetch(url).then(res => res.json())
-    )
-
-    const user = data ?? {}
+    const profile = useOCS()
 
     return (
         <Page>
             <Title>User Info</Title>
             <JsonViewerFrame>
-                <JsonViewer>{JSON.stringify(user, undefined, 4)}</JsonViewer>
+                <JsonViewer>{JSON.stringify(profile, undefined, 4)}</JsonViewer>
             </JsonViewerFrame>
         </Page>
     )

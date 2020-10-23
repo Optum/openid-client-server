@@ -1,20 +1,13 @@
-import {FastifyInstance} from 'fastify'
-import {OCSOptions} from '../types'
-import {OpenIdClientService} from '../service'
+import {FastifyReply, FastifyRequest} from 'fastify'
+import {ClientService} from '../types'
 
-export function callback(
-    fastify: FastifyInstance,
-    _: OCSOptions,
-    service: OpenIdClientService
-): void {
-    fastify.get('/openid/callback', async function (
-        request,
-        reply
+export default function make(service: ClientService) {
+    return async function handler(
+        request: FastifyRequest,
+        reply: FastifyReply
     ): Promise<void> {
-        const csrfString = (await request.session.get('csrfString')) as string
-        const codeVerifier = (await request.session.get(
-            'codeVerifier'
-        )) as string
+        const csrfString = request.session.get('csrfString')
+        const codeVerifier = request.session.get('codeVerifier')
 
         if (!csrfString) {
             request.log.error(
@@ -31,10 +24,8 @@ export function callback(
 
         request.session.set('tokenSet', tokenSet)
 
-        const fromUrl = (await request.session.get('fromUrl')) as string
+        const fromUrl = await request.session.get('fromUrl')
 
         return reply.redirect(fromUrl ?? '/')
-    })
+    }
 }
-
-export default callback
