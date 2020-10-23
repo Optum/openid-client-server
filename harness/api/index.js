@@ -1,6 +1,6 @@
 const fastify = require('fastify')
 
-const port = Number.parseInt(process.env.OPENID_RIG_API_PORT || '3000', 10)
+const port = Number.parseInt(process.env.OPENID_HARNESS_API_PORT || '3000', 10)
 
 const app = fastify({
     // 'fatal', 'error', 'warn', 'info', 'debug', 'trace' or 'silent'
