@@ -37,7 +37,7 @@
         "jsonwebtoken": "^8.5.1",
         "jwks-rsa": "^1.7.0",
         "ms": "^2.1.2",
-        "node-fetch": "^2.6.0",
+        "node-fetch": "^3.1.1",
         "openid-client": "^3.14.0",
         "p-pipe": "^3.0.0",
         "pino": "^5.17.0",
