@@ -53,15 +53,14 @@ typings/
 
 # OSX
 .DS_Store
+node_modules
+
+coverage
+harness/app/.next
 
 # compiled server output
 dist
-
-examples/nextjs/.next
-examples/nextjs/server
-
-examples/static/server
-
-examples/static-gh/server
-
 .envrc
+.env
+
+secret-session-key

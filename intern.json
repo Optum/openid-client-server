@@ -1,0 +1,11 @@
+{
+    "suites": "test/**/*.ts",
+    "coverage": [
+        "src/**/*.ts"
+    ],
+    "reporters": [
+        "runner",
+        "jsoncoverage",
+        "lcov"
+    ]
+}

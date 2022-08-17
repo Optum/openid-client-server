@@ -1,25 +1,27 @@
 {
     "compilerOptions": {
         "allowJs": false,
+        "allowSyntheticDefaultImports": true,
         "alwaysStrict": true,
+        "declaration": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": false,
-        "lib": ["ES2019"],
+        "lib": ["ES2018"],
         "module": "commonjs",
         "moduleResolution": "node",
         "noEmit": false,
         "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "resolveJsonModule": true,
         "skipLibCheck": true,
+        "sourceMap": true,
         "strict": true,
-        "target": "ES2019",
-        "outDir": "../dist",
-        "declaration": true,
-        "sourceMap": true
+        "target": "ES2018",
+        "types": ["node"],
+        "outDir": "../dist"
     },
-    "exclude": ["node_modules"],
-    "include": ["**/*.ts"]
+    "include": ["*.ts", "**/*.ts"]
 }

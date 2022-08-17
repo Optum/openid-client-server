@@ -1,0 +1,8 @@
+export OPENID_ISSUER=
+export OPENID_CLIENT_ID=
+export OPENID_CLIENT_SECRET=
+export OPENID_REDIRECT_URI=http://localhost:8080/openid/callback
+export OPENID_SESSION_NAME=ocs-demo-session
+export OPENID_SESSION_KEY=
+export OPENID_SERVER_PORT=8080
+export OPENID_HARNESS_API_PORT=3000

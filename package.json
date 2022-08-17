@@ -7,15 +7,26 @@
     "engines": {
         "node": ">=8"
     },
+    "contributors": [
+        {
+            "name": "seesharpguy",
+            "email": "ryan.sites@optum.com",
+            "url": "https://github.com/seesharpguy"
+        },
+        {
+            "name": "lxghtless",
+            "email": "lxghtl3ss@gmail.com",
+            "url": "https://github.com/lxghtless"
+        }
+    ],
     "scripts": {
-        "build": "xo && rimraf dist && tsc -p src/tsconfig.json",
-        "test": "xo && nyc ava",
-        "lint": "xo --fix",
-        "postlint": "yarn pretty-json-files",
-        "type-check": "tsc -p tsconfig.json --noEmit",
-        "clean": "rimraf coverage dist .nyc_output",
-        "pretty-json-files": "prettier --write --config .prettierrc src/tsconfig.json tsconfig.json test/helpers/example-openid-configuration.json",
-        "release": "release-it --no-npm.publish"
+        "build": "eslint \"src/**/*.ts\" && tsc -p src/tsconfig.json",
+        "dev": "nodemon --exec ./run.sh",
+        "lint": "eslint \"src/**/*.ts\" --fix",
+        "release": "release-it --no-npm.publish",
+        "pretest": "eslint \"src/**/*.ts\"",
+        "test": "cross-env TS_NODE_FILES=true intern",
+        "clean": "rimraf dist rig/app/.next coverage"
     },
     "publishConfig": {
         "access": "public",
@@ -24,7 +35,8 @@
     "main": "dist/index.js",
     "files": [
         "dist",
-        "src/**/*.ts"
+        "src/**/*.ts",
+        "src/options-schema.json"
     ],
     "keywords": [
         "openid",
@@ -32,120 +44,48 @@
         "web-app-server"
     ],
     "dependencies": {
-        "cookies": "^0.8.0",
-        "crypto-random-string": "^3.1.0",
-        "jsonwebtoken": "^8.5.1",
-        "jwks-rsa": "^1.7.0",
-        "ms": "^2.1.2",
-        "node-fetch": "^2.6.0",
-        "openid-client": "^3.14.0",
-        "p-pipe": "^3.0.0",
-        "pino": "^5.17.0",
-        "pino-pretty": "^3.6.0",
-        "qs": "^6.9.1"
+        "ajv": "^6.12.6",
+        "crypto-random-string": "^3.3.0",
+        "fastify-http-proxy": "^4.0.4",
+        "fastify-plugin": "^3.0.0",
+        "fastify-secure-session": "^2.3.0",
+        "openid-client": "^4.2.0",
+        "path-to-regexp": "^6.2.0",
+        "ramda": "^0.27.1"
     },
     "devDependencies": {
-        "@types/cookies": "^0.7.4",
-        "@types/jsonwebtoken": "^8.3.7",
-        "@types/ms": "^0.7.31",
-        "@types/node": "^13.7.0",
-        "@types/node-fetch": "^2.5.5",
-        "@types/pino": "^5.15.5",
-        "@types/qs": "^6.9.1",
-        "@types/uuid": "^7.0.2",
-        "@typescript-eslint/eslint-plugin": "^2.19.2",
-        "@typescript-eslint/parser": "^2.19.2",
-        "ava": "^3.5.0",
-        "dotenv": "^8.2.0",
-        "eslint": "^6.8.0",
-        "eslint-config-xo-typescript": "^0.26.0",
+        "@types/node": "^14.14.0",
+        "@types/ramda": "^0.27.29",
+        "@typescript-eslint/eslint-plugin": "^4.5.0",
+        "@typescript-eslint/parser": "^4.5.0",
+        "babel-plugin-styled-components": "^1.11.1",
+        "cross-env": "^7.0.2",
+        "eslint": "^7.11.0",
+        "eslint-config-prettier": "^6.13.0",
         "eslint-plugin-prettier": "^3.1.4",
-        "husky": "^4.2.5",
-        "mock-http": "^1.0.2",
-        "nock": "^13.0.4",
-        "nyc": "^15.0.0",
-        "p-event": "^4.1.0",
-        "prettier": "^2.0.5",
-        "release-it": "^13.6.8",
+        "eslint-plugin-promise": "^4.2.1",
+        "eslint-plugin-sonarjs": "^0.5.0",
+        "eslint-plugin-unicorn": "^23.0.0",
+        "fastify": "^3.7.0",
+        "husky": "^4.3.0",
+        "intern": "^4.8.8",
+        "next": "^9.5.5",
+        "nodemon": "^2.0.6",
+        "prettier": "^2.1.2",
+        "react": "^16.14.0",
+        "react-dom": "^16.14.0",
+        "react-is": "^16.13.1",
         "rimraf": "^3.0.2",
-        "ts-node": "^8.6.2",
-        "ts-sinon": "^1.0.25",
-        "typescript": "^3.7.5",
-        "uuid": "^7.0.2",
-        "xo": "^0.26.1"
+        "styled-components": "^5.2.0",
+        "swr": "^0.3.6",
+        "typescript": "^4.0.3"
     },
     "peerDependencies": {
-        "@types/pino": ">=5.15.0"
+        "fastify": ">=3.3.0"
     },
     "husky": {
         "hooks": {
             "pre-commit": "yarn lint"
         }
-    },
-    "xo": {
-        "envs": [
-            "node"
-        ],
-        "extends": [
-            "xo-typescript"
-        ],
-        "extensions": [
-            "ts"
-        ],
-        "prettier": true,
-        "semicolon": false,
-        "space": 4,
-        "ignore": [
-            "examples"
-        ],
-        "rules": {
-            "capitalized-comments": 0,
-            "sort-imports": [
-                "error",
-                {
-                    "ignoreCase": false,
-                    "ignoreDeclarationSort": true,
-                    "ignoreMemberSort": false,
-                    "memberSyntaxSortOrder": [
-                        "all",
-                        "single",
-                        "multiple",
-                        "none"
-                    ]
-                }
-            ]
-        }
-    },
-    "nyc": {
-        "all": true,
-        "reporter": [
-            "lcov",
-            "text"
-        ],
-        "extension": [
-            ".ts"
-        ],
-        "require": [
-            "ts-node/register"
-        ],
-        "include": [
-            "src/**/*.ts"
-        ]
-    },
-    "ava": {
-        "extensions": [
-            "ts"
-        ],
-        "require": [
-            "ts-node/register"
-        ],
-        "files": [
-            "test/*.test.ts",
-            "test/**/*.test.ts"
-        ],
-        "cache": true,
-        "concurrency": 1,
-        "failFast": false,
-        "verbose": true
     }
 }
