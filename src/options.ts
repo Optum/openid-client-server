@@ -461,9 +461,9 @@ const parseOptions = (envMapItems: EnvMapItem[]): ParsedOptions => {
         if (Array.isArray(emi.defaultValue)) {
             const values = value.split(',')
             const castValues: BasicTypeArray = []
-            const defaultValueType = typeof emi.defaultValue
+            const firstElement = emi.defaultValue[0]
             for (const val of values) {
-                castValues.push(castValue(defaultValueType, val))
+                castValues.push(castValue(firstElement, val))
             }
 
             options[emi.propKey] = castValues

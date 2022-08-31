@@ -59,6 +59,10 @@ export const sendResponse = (
     payload: any,
     res: ServerResponse
 ): void => {
+    if (headers.raw) {
+        headers = clone(headers.raw())
+    }
+
     res.writeHead(status, headers)
     res.end(payload)
 }
@@ -226,12 +230,14 @@ export const executeRequest = async (
         delete reqHeaders.cookie
     }
 
-    const requestUrl = `${host}${String(path)}`.replace(pathname, '')
+    const requestPath = String(path).replace(pathname, '')
+    const requestUrl = new URL(`${host}${requestPath}`)
+    reqHeaders.host = requestUrl.hostname
 
-    ctx.log.debug(`fetching ${requestUrl}`)
+    ctx.log.debug(`fetching ${requestUrl.href}`)
 
     try {
-        const response = await fetch(requestUrl, {
+        const response = await fetch(requestUrl.href, {
             method: normalizedMethod,
             headers: reqHeaders as Headers,
             body: includeBody ? body : undefined
