@@ -147,5 +147,6 @@
         "concurrency": 1,
         "failFast": false,
         "verbose": true
-    }
+    },
+    "packageManager": "yarn@3.2.3"
 }
