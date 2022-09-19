@@ -148,5 +148,8 @@
         "failFast": false,
         "verbose": true
     },
-    "packageManager": "yarn@3.2.3"
+    "packageManager": "yarn@3.2.3",
+    "resolutions": {
+        "lodash": "4.17.21"
+    }
 }
