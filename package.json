@@ -1,6 +1,6 @@
 {
     "name": "@optum/openid-client-server",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "An OpenId Relying Party (RP, Client) application server.",
     "license": "Apache-2.0",
     "repository": "https://github.com/optum/openid-client-server",
@@ -55,7 +55,7 @@
         "@types/uuid": "^7.0.2",
         "@typescript-eslint/eslint-plugin": "^2.19.2",
         "@typescript-eslint/parser": "^2.19.2",
-        "ava": "^3.5.0",
+        "ava": "^4.3.3",
         "dotenv": "^8.2.0",
         "eslint": "^6.8.0",
         "eslint-config-xo-typescript": "^0.26.0",
@@ -150,6 +150,7 @@
     },
     "packageManager": "yarn@3.2.3",
     "resolutions": {
-        "lodash": "4.17.21"
+        "lodash": "4.17.21",
+        "vm2": "3.9.11"
     }
 }
