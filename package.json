@@ -8,9 +8,10 @@
         "node": ">=8"
     },
     "scripts": {
-        "build": "xo && rimraf dist && tsc -p src/tsconfig.json",
-        "test": "xo && nyc ava",
-        "lint": "xo --fix",
+        "build": "npm run prettier-check && rimraf dist && tsc -p src/tsconfig.json",
+        "test": "npm run prettier-check && nyc ava",
+        "prettier-check": "prettier --check  'src/**/*.{js,ts,tsx}'",
+        "lint": "prettier --write 'src/**/*.{js,ts,tsx}'",
         "postlint": "yarn pretty-json-files",
         "type-check": "tsc -p tsconfig.json --noEmit",
         "clean": "rimraf coverage dist .nyc_output",
@@ -58,7 +59,6 @@
         "ava": "^4.3.3",
         "dotenv": "^8.2.0",
         "eslint": "^6.8.0",
-        "eslint-config-xo-typescript": "^0.26.0",
         "eslint-plugin-prettier": "^3.1.4",
         "husky": "^4.2.5",
         "mock-http": "^1.0.2",
@@ -71,8 +71,7 @@
         "ts-node": "^8.6.2",
         "ts-sinon": "^1.0.25",
         "typescript": "^3.7.5",
-        "uuid": "^7.0.2",
-        "xo": "^0.26.1"
+        "uuid": "^7.0.2"
     },
     "peerDependencies": {
         "@types/pino": ">=5.15.0"
@@ -80,40 +79,6 @@
     "husky": {
         "hooks": {
             "pre-commit": "yarn lint"
-        }
-    },
-    "xo": {
-        "envs": [
-            "node"
-        ],
-        "extends": [
-            "xo-typescript"
-        ],
-        "extensions": [
-            "ts"
-        ],
-        "prettier": true,
-        "semicolon": false,
-        "space": 4,
-        "ignore": [
-            "examples"
-        ],
-        "rules": {
-            "capitalized-comments": 0,
-            "sort-imports": [
-                "error",
-                {
-                    "ignoreCase": false,
-                    "ignoreDeclarationSort": true,
-                    "ignoreMemberSort": false,
-                    "memberSyntaxSortOrder": [
-                        "all",
-                        "single",
-                        "multiple",
-                        "none"
-                    ]
-                }
-            ]
         }
     },
     "nyc": {
@@ -151,6 +116,7 @@
     "packageManager": "yarn@3.2.3",
     "resolutions": {
         "lodash": "4.17.21",
-        "vm2": "3.9.11"
+        "vm2": "3.9.11",
+        "semver-regex": "3.1.4"
     }
 }

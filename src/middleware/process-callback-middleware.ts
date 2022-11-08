@@ -1,11 +1,10 @@
+import type {Client} from 'openid-client'
 import {DefaultErrorResponse, qsOfErrorResponse} from '../status'
+import type {Context} from '../context'
+import type {Options} from '../options'
+import type {SessionStore} from '../session'
 import {pathsMatch, redirectResponse} from './util'
-
-import {Client} from 'openid-client'
-import {Context} from '../context'
-import {OpenIdClientMiddleware} from './types'
-import {Options} from '../options'
-import {SessionStore} from '../session'
+import type {OpenIdClientMiddleware} from './types'
 
 export const processCallbackMiddleware = (
     client: Client,
@@ -43,10 +42,10 @@ export const processCallbackMiddleware = (
                 const redirectUrl =
                     session.securedPathFromUrl ?? session.fromUrl ?? '/'
 
-                const callbackParams = client.callbackParams(ctx.req)
+                const callbackParameters = client.callbackParams(ctx.req)
 
                 await sessionStore.set(ctx.sessionId, {
-                    sessionState: callbackParams.session_state ?? null,
+                    sessionState: callbackParameters.session_state ?? null,
                     securedPathFromUrl: null,
                     fromUrl: null,
                     csrfString: null,
@@ -63,7 +62,7 @@ export const processCallbackMiddleware = (
                 ) {
                     ctx.tokenSet = await client.oauthCallback(
                         redirectUri,
-                        callbackParams,
+                        callbackParameters,
                         {
                             state: csrfString,
                             code_verifier: codeVerifier ?? undefined
@@ -72,7 +71,7 @@ export const processCallbackMiddleware = (
                 } else {
                     ctx.tokenSet = await client.callback(
                         redirectUri,
-                        callbackParams,
+                        callbackParameters,
                         {
                             state: csrfString,
                             code_verifier: codeVerifier ?? undefined

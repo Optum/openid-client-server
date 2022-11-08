@@ -1,6 +1,5 @@
-import {OptionsError, resolveOptions} from '../src/options'
-
 import test from 'ava'
+import {OptionsError, resolveOptions} from '../src/options'
 
 test('resolveOptions should fail when no env are set', t => {
     t.throws(() => resolveOptions(), {

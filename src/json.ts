@@ -1,15 +1,16 @@
-import {TokenSet, UserinfoResponse} from 'openid-client'
+import type {TokenSet, UserinfoResponse} from 'openid-client'
 
 export type BasicType = string | number | boolean
 
 export type BasicTypeArray = BasicType[]
 
+// @ts-ignore
 export type JsonPropType = BasicType | Date | Json | JsonArray
 
 export type OpenIdType = TokenSet | UserinfoResponse
 
-export interface Json {
-    [x: string]: JsonPropType | OpenIdType | null
-}
+// @ts-ignore
+export type Json = Record<string, JsonPropType | OpenIdType | undefined>
 
-export interface JsonArray extends Array<JsonPropType | OpenIdType | null> {}
+export type JsonArray = Record<string, unknown> &
+    Array<JsonPropType | OpenIdType | undefined>

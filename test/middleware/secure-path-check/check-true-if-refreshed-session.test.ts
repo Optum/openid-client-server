@@ -1,16 +1,16 @@
-import {Client, TokenSet} from 'openid-client'
-import {IncomingMessage, ServerResponse} from 'http'
+import type {IncomingMessage, ServerResponse} from 'http'
+import type {UrlWithParsedQuery} from 'url'
+import type {Client, TokenSet} from 'openid-client'
 
-import {Logger} from 'pino'
-import {MemorySessionStore} from '../../../src/session'
-import {makeOptionsWithSecurePaths} from '../../helpers/test-options'
-import {UrlWithParsedQuery} from 'url'
-import {createContext} from '../../../src/context'
+import type {Logger} from 'pino'
 import crs from 'crypto-random-string'
-import {securePathCheckMiddleware} from '../../../src/middleware/secure-path-check-middleware'
 import {stubInterface} from 'ts-sinon'
 import test from 'ava'
 import {v4 as uuid} from 'uuid'
+import {MemorySessionStore} from '../../../src/session'
+import {makeOptionsWithSecurePaths} from '../../helpers/test-options'
+import {createContext} from '../../../src/context'
+import {securePathCheckMiddleware} from '../../../src/middleware/secure-path-check-middleware'
 
 const testPath = '/dashboard'
 
@@ -19,7 +19,7 @@ const testOptions = makeOptionsWithSecurePaths([testPath])
 test('securePathCheckMiddleware check true refreshed session', async t => {
     const sessionStore = new MemorySessionStore()
     const clientStub = stubInterface<Client>()
-    const reqStub = stubInterface<IncomingMessage>()
+    const requestStub = stubInterface<IncomingMessage>()
     const resStub = stubInterface<ServerResponse>()
     const urlStub = stubInterface<UrlWithParsedQuery>()
     const tokenSetStub = stubInterface<TokenSet>()
@@ -30,7 +30,7 @@ test('securePathCheckMiddleware check true refreshed session', async t => {
 
     clientStub.refresh.resolves(tokenSetStub)
 
-    const ctx = createContext(reqStub, resStub, urlStub, loggerStub)
+    const ctx = createContext(requestStub, resStub, urlStub, loggerStub)
     ctx.sessionId = crs({length: 10})
 
     await sessionStore.set(ctx.sessionId, {

@@ -1,16 +1,15 @@
+import type {IncomingMessage, ServerResponse} from 'http'
+import type {UrlWithParsedQuery} from 'url'
+import sinon, {stubInterface} from 'ts-sinon'
+import type {Client} from 'openid-client'
+import type {Logger} from 'pino'
+import test from 'ava'
 import * as util from '../../../src/middleware/util'
 
-import {IncomingMessage, ServerResponse} from 'http'
-import sinon, {stubInterface} from 'ts-sinon'
-
-import {Client} from 'openid-client'
-import {Logger} from 'pino'
 import {MemorySessionStore} from '../../../src/session'
-import {Options} from '../../../src/options'
-import {UrlWithParsedQuery} from 'url'
-import {UserInfoFromJwtService} from '../../../src/middleware/types'
+import type {Options} from '../../../src/options'
+import type {UserInfoFromJwtService} from '../../../src/middleware/types'
 import {createContext} from '../../../src/context'
-import test from 'ava'
 import {userInfoMiddleware} from '../../../src/middleware/userinfo-middleware'
 
 const sendJsonResponseStub = sinon.stub(util, 'sendJsonResponse')
@@ -30,13 +29,13 @@ test('userInfoMiddleware should throw access denied when no session id is presen
         userInfoFromJwtService: userInfoFromJwtServiceStub
     })
 
-    const reqStub = stubInterface<IncomingMessage>()
+    const requestStub = stubInterface<IncomingMessage>()
     const resStub = stubInterface<ServerResponse>()
     const urlStub = stubInterface<UrlWithParsedQuery>()
     const loggerStub = stubInterface<Logger>()
     urlStub.pathname = pathname
 
-    let ctx = createContext(reqStub, resStub, urlStub, loggerStub)
+    let ctx = createContext(requestStub, resStub, urlStub, loggerStub)
 
     ctx = await userinfo(ctx)
 

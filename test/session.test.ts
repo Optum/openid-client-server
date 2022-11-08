@@ -1,6 +1,6 @@
-import {MemorySessionStore} from '../src/session'
 import sinon from 'ts-sinon'
 import test from 'ava'
+import {MemorySessionStore} from '../src'
 
 test('MemorySessionStore should set new and patch as expected', async t => {
     const store = new MemorySessionStore()

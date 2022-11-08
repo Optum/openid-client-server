@@ -1,5 +1,4 @@
-import exampleOpenIdConfig from './example-openid-configuration.json'
-import {Options} from '../../src/options'
+import type {Options} from '../../src/options'
 
 export const issuer = 'https://examples.auth0.com'
 export const discoveryPath = '/.well-known/openid-configuration'
@@ -71,21 +70,21 @@ export const testOptionsWithoutScope: Options = {
 }
 
 export const makeOptionsWithSecurePaths = (securedPaths: string[]): Options => {
-    const opts = {...testOptions}
-    opts.clientServerOptions = {
+    const options = {...testOptions}
+    options.clientServerOptions = {
         ...testOptions.clientServerOptions,
         securedPaths
     }
-    return opts
+    return options
 }
 
 export const makeOptionsWithScope = (scope: string): Options => {
-    const opts = {...testOptions}
-    opts.clientServerOptions = {
+    const options = {...testOptions}
+    options.clientServerOptions = {
         ...testOptions.clientServerOptions,
         scope
     }
-    return opts
+    return options
 }
 
-export const openIdDiscoveryConfiguration = exampleOpenIdConfig
+export {default as openIdDiscoveryConfiguration} from './example-openid-configuration.json'

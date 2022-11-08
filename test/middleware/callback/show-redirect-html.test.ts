@@ -1,15 +1,14 @@
+import type {IncomingMessage, ServerResponse} from 'http'
+import type {UrlWithParsedQuery} from 'url'
+import sinon, {stubInterface} from 'ts-sinon'
+import type {Client} from 'openid-client'
+import type {Logger} from 'pino'
+import test from 'ava'
 import * as util from '../../../src/middleware/util'
 
-import {IncomingMessage, ServerResponse} from 'http'
-import sinon, {stubInterface} from 'ts-sinon'
-
-import {Client} from 'openid-client'
-import {Logger} from 'pino'
 import {testOptions} from '../../helpers/test-options'
-import {UrlWithParsedQuery} from 'url'
 import {callbackMiddleware} from '../../../src/middleware/callback-middleware'
 import {createContext} from '../../../src/context'
-import test from 'ava'
 
 const showResponseStub = sinon.stub(util, 'showResponse')
 
@@ -24,13 +23,13 @@ test('callbackMiddleware should show redirect html', async t => {
         testOptions
     )
 
-    const reqStub = stubInterface<IncomingMessage>()
+    const requestStub = stubInterface<IncomingMessage>()
     const resStub = stubInterface<ServerResponse>()
     const urlStub = stubInterface<UrlWithParsedQuery>()
     const loggerStub = stubInterface<Logger>()
     urlStub.pathname = callbackPath
 
-    let ctx = createContext(reqStub, resStub, urlStub, loggerStub)
+    let ctx = createContext(requestStub, resStub, urlStub, loggerStub)
     clientStub.callbackParams.returns({
         code: 'asdfington',
         session_state: 'fdsaingto'

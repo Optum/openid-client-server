@@ -1,10 +1,9 @@
+import type {Client} from 'openid-client'
 import {AccessDeniedErrorResponse, qsOfErrorResponse} from '../status'
-
-import {BooleanCheckMiddleware} from './types'
-import {Client} from 'openid-client'
-import {Context} from '../context'
-import {Options} from '../options'
-import {SessionStore} from '../session'
+import type {Context} from '../context'
+import type {Options} from '../options'
+import type {SessionStore} from '../session'
+import type {BooleanCheckMiddleware} from './types'
 import {redirectResponse} from './util'
 
 export const securePathCheckMiddleware = (

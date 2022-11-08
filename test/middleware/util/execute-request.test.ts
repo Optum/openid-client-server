@@ -1,13 +1,13 @@
+import {parse} from 'url'
 import {Request, Response} from 'mock-http'
 import sinon, {stubInterface} from 'ts-sinon'
 
-import {Logger} from 'pino'
+import type {Logger} from 'pino'
+import nock from 'nock'
+import test from 'ava'
 import {createContext} from '../../../src/context'
 import {executeRequest} from '../../../src/middleware/util'
-import nock from 'nock'
 // eslint-disable-next-line node/no-deprecated-api
-import {parse} from 'url'
-import test from 'ava'
 
 const testProxyHost = 'http://downstream-test.test'
 
@@ -26,7 +26,7 @@ test('executeRequest should fetch from expected url', async t => {
     const testHeaders = {
         'Context-Type': 'text/plain'
     }
-    const req = new Request({
+    const request = new Request({
         headers: testHeaders,
         buffer: Buffer.from(testBody)
     })
@@ -37,7 +37,7 @@ test('executeRequest should fetch from expected url', async t => {
     const testUrl = `http://unit-test.test${testProxyPathname}${testPathname}`
     const parsedUrl = parse(testUrl, true)
     const loggerStub = stubInterface<Logger>()
-    const testContext = createContext(req, res, parsedUrl, loggerStub)
+    const testContext = createContext(request, res, parsedUrl, loggerStub)
 
     await executeRequest({
         token: testToken,

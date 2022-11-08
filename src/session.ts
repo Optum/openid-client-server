@@ -1,26 +1,25 @@
-import {TokenSet, UserinfoResponse} from 'openid-client'
+import type {TokenSet, UserinfoResponse} from 'openid-client'
 
-import {Json} from './json'
+import type {Json} from './json'
 
-export interface Profile {
-    [key: string]: any
-}
+export type Profile = Record<string, any>
 
-export interface SessionMemCache extends Map<string, Session> {}
+export type SessionMemCache = Record<string, unknown | any> &
+    Map<string, Session>
 
-export interface Session extends Json {
+export type Session = {
     sessionId: string
     createdAt: number
-    csrfString: string | null
-    codeVerifier: string | null
-    tokenSet: TokenSet | null
-    userInfo: UserinfoResponse | null
-    sessionState: string | null
-    fromUrl: string | null
-    securedPathFromUrl: string | null
-}
+    csrfString: string | undefined
+    codeVerifier: string | undefined
+    tokenSet: TokenSet | undefined
+    userInfo: UserinfoResponse | undefined
+    sessionState: string | undefined
+    fromUrl: string | undefined
+    securedPathFromUrl: string | undefined
+} & Json
 
-export interface SessionStore {
+export type SessionStore = {
     clear(): Promise<void>
     destroy(sessionId: string): Promise<void>
     get(sessionId: string): Promise<Session | undefined>

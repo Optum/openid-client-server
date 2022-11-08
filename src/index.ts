@@ -13,4 +13,4 @@ export {
     RequestListenerEvents
 } from './request-listener'
 export {clientServer} from './client-server'
-export {Json} from './json'
+export type {Json} from './json'

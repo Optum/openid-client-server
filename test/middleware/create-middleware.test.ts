@@ -1,12 +1,12 @@
-import {Client, IssuerMetadata} from 'openid-client'
+import type {Client, IssuerMetadata} from 'openid-client'
 
-import {Options} from '../../src/options'
-import {testOptions, testOptionsWithProxy} from '../helpers/test-options'
-import {SessionStore} from '../../src/session'
-import {clone} from '../../src/middleware/util'
-import {createMiddleware} from '../../src/middleware'
 import {stubInterface} from 'ts-sinon'
 import test from 'ava'
+import type {Options} from '../../src/options'
+import {testOptions, testOptionsWithProxy} from '../helpers/test-options'
+import type {SessionStore} from '../../src/session'
+import {clone} from '../../src/middleware/util'
+import {createMiddleware} from '../../src/middleware'
 
 test('createMiddleware should initialize a Pipeline with proxy paths as expected', t => {
     const issuerMetadataStub = stubInterface<IssuerMetadata>()

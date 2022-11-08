@@ -1,15 +1,14 @@
+import type {IncomingMessage, ServerResponse} from 'http'
+import type {UrlWithParsedQuery} from 'url'
+import type {Client, IdTokenClaims, TokenSet} from 'openid-client'
+import sinon, {stubInterface} from 'ts-sinon'
+import type {Logger} from 'pino'
+import test from 'ava'
 import * as util from '../../../src/middleware/util'
 
-import {Client, IdTokenClaims, TokenSet} from 'openid-client'
-import {IncomingMessage, ServerResponse} from 'http'
-import sinon, {stubInterface} from 'ts-sinon'
-
-import {Logger} from 'pino'
 import {MemorySessionStore} from '../../../src/session'
-import {UrlWithParsedQuery} from 'url'
 import {createContext} from '../../../src/context'
 import {proxyMiddleware} from '../../../src/middleware/proxy-middleware'
-import test from 'ava'
 
 const executeRequestStub = sinon.stub(util, 'executeRequest')
 
@@ -46,17 +45,17 @@ test('proxyMiddlware should refresh token when expired and execute request', asy
         client: clientStub
     })
 
-    const reqStub = stubInterface<IncomingMessage>()
+    const requestStub = stubInterface<IncomingMessage>()
     const resStub = stubInterface<ServerResponse>()
     const urlStub = stubInterface<UrlWithParsedQuery>()
     const loggerStub = stubInterface<Logger>()
     urlStub.pathname = testPathname
 
     const testSessionId = 'asdfington'
-    let testCtx = createContext(reqStub, resStub, urlStub, loggerStub)
+    let testCtx = createContext(requestStub, resStub, urlStub, loggerStub)
     testCtx.sessionId = testSessionId
 
-    reqStub.method = testMethod
+    requestStub.method = testMethod
 
     const expiredStub = sinon.stub()
     expiredStub.returns(true)

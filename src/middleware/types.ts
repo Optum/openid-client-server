@@ -1,17 +1,17 @@
-import {Client} from 'openid-client'
-import {Context} from '../context'
-import {Json} from '../json'
-import {Options} from '../options'
-import {SessionStore} from '../session'
+import type {Client} from 'openid-client'
+import type {Context} from '../context'
+import type {Json} from '../json'
+import type {Options} from '../options'
+import type {SessionStore} from '../session'
 
-export interface UserInfoFromJwtService {
+export type UserInfoFromJwtService = {
     userInfoFromJwt: (token: string) => Promise<Json>
 }
 
 export type BooleanCheckMiddleware = (ctx: Context) => Promise<boolean>
 export type OpenIdClientMiddleware = (ctx: Context) => Promise<Context>
 
-export interface UserInfoParams {
+export type UserInfoParams = {
     client: Client
     pathname: string
     sessionStore: SessionStore
@@ -19,7 +19,7 @@ export interface UserInfoParams {
     userInfoFromJwtService: UserInfoFromJwtService
 }
 
-export interface ProxyParams {
+export type ProxyParams = {
     host: string
     pathname: string
     excludeCookie: boolean
@@ -29,7 +29,7 @@ export interface ProxyParams {
     client: Client
 }
 
-export interface ExecuteProxyRequestParams {
+export type ExecuteProxyRequestParams = {
     token: string
     excludeCookie: boolean
     excludeOriginHeaders: boolean

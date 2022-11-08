@@ -1,18 +1,17 @@
-import * as util from '../../../src/middleware/util'
-
-import {Client, TokenSet} from 'openid-client'
-import {IncomingMessage, ServerResponse} from 'http'
+import type {IncomingMessage, ServerResponse} from 'http'
+import type {UrlWithParsedQuery} from 'url'
+import type {Client, TokenSet} from 'openid-client'
 import sinon, {stubInterface} from 'ts-sinon'
-
-import {Logger} from 'pino'
-import {MemorySessionStore} from '../../../src/session'
-import {testOptions} from '../../helpers/test-options'
-import {UrlWithParsedQuery} from 'url'
-import {createContext} from '../../../src/context'
+import type {Logger} from 'pino'
 import crs from 'crypto-random-string'
-import {processCallbackMiddleware} from '../../../src/middleware/process-callback-middleware'
 import test from 'ava'
 import {v4 as uuid} from 'uuid'
+import * as util from '../../../src/middleware/util'
+
+import {MemorySessionStore} from '../../../src/session'
+import {testOptions} from '../../helpers/test-options'
+import {createContext} from '../../../src/context'
+import {processCallbackMiddleware} from '../../../src/middleware/process-callback-middleware'
 
 const redirectResponseStub = sinon.stub(util, 'redirectResponse')
 
@@ -51,13 +50,13 @@ test('processCallbackMiddleware should process oauth callback and redirect to se
         sessionStore
     )
 
-    const reqStub = stubInterface<IncomingMessage>()
+    const requestStub = stubInterface<IncomingMessage>()
     const resStub = stubInterface<ServerResponse>()
     const urlStub = stubInterface<UrlWithParsedQuery>()
     const loggerStub = stubInterface<Logger>()
     urlStub.pathname = processCallbackPath
 
-    let ctx = createContext(reqStub, resStub, urlStub, loggerStub)
+    let ctx = createContext(requestStub, resStub, urlStub, loggerStub)
     ctx.sessionId = testSessionId
 
     ctx = await processCallback(ctx)

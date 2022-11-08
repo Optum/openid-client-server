@@ -1,4 +1,4 @@
-export interface ErrorResponse {
+export type ErrorResponse = {
     error: string
     error_description: string
     sr_num: number
@@ -21,8 +21,7 @@ export const AccessDeniedErrorResponse: ErrorResponse = {
     error_description: 'The request is unauthorized'
 }
 
-ErrorResponses.push(AccessDeniedErrorResponse)
-ErrorResponses.push(DefaultErrorResponse)
+ErrorResponses.push(AccessDeniedErrorResponse, DefaultErrorResponse)
 
 export const qsOfErrorResponse = ({
     status_code,

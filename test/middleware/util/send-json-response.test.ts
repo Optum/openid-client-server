@@ -1,20 +1,20 @@
-import {ServerResponse} from 'http'
-import {sendJsonResponse} from '../../../src/middleware/util'
+import type {ServerResponse} from 'http'
 import {stubInterface} from 'ts-sinon'
 import test from 'ava'
+import {sendJsonResponse} from '../../../src/middleware/util'
 
 test('sendJsonResponse should set location as expected', t => {
     const resStub = stubInterface<ServerResponse>()
-    const testObj = {
+    const testObject = {
         testValue: 'something'
     }
 
-    const testPayload = JSON.stringify(testObj)
+    const testPayload = JSON.stringify(testObject)
     const testContentLength = Buffer.byteLength(testPayload)
     const testContentType = 'application/json; charset=utf-8'
     const testStatus = 200
 
-    sendJsonResponse(testStatus, testObj, resStub)
+    sendJsonResponse(testStatus, testObject, resStub)
 
     t.is(resStub.writeHead.args[0][0], testStatus)
     t.is(resStub.writeHead.args[0][1]?.['Content-Type'], testContentType)

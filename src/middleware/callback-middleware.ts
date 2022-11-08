@@ -1,15 +1,15 @@
+import type {Client} from 'openid-client'
+import qs from 'qs'
 import {DefaultErrorResponse, qsOfErrorResponse} from '../status'
+import type {Context} from '../context'
+import type {Options} from '../options'
 import {pathsMatch, redirectResponse, showResponse} from './util'
 
-import {Client} from 'openid-client'
-import {Context} from '../context'
-import {OpenIdClientMiddleware} from './types'
-import {Options} from '../options'
-import qs from 'qs'
+import type {OpenIdClientMiddleware} from './types'
 
 const getRedirectPage = (
     processPathName: string,
-    redirectQsParams: string
+    redirectQsParameters: string
 ): string => {
     return `
     <html>
@@ -19,7 +19,7 @@ const getRedirectPage = (
             verifying...
             <script>
                 window.addEventListener("load", () => {
-                    window.location.href = '${processPathName}?${redirectQsParams}'
+                    window.location.href = '${processPathName}?${redirectQsParameters}'
                 })
             </script>
         </body>
@@ -37,13 +37,13 @@ export const callbackMiddleware = (
         const {errorPagePath} = options.clientServerOptions
         try {
             if (pathsMatch(ctx.url, pathname)) {
-                const callbackParams = client.callbackParams(ctx.req)
+                const callbackParameters = client.callbackParams(ctx.req)
 
-                const redirectQsParams = qs.stringify(callbackParams)
+                const redirectQsParameters = qs.stringify(callbackParameters)
 
                 showResponse(
                     200,
-                    getRedirectPage(processPathName, redirectQsParams),
+                    getRedirectPage(processPathName, redirectQsParameters),
                     ctx.res
                 )
 

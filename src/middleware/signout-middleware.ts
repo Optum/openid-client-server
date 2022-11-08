@@ -1,12 +1,12 @@
-import {DefaultErrorResponse, qsOfErrorResponse} from '../status'
-import {pathsMatch, redirectResponse} from './util'
-
-import {Context} from '../context'
-import {OpenIdClientMiddleware} from './types'
-import {Options} from '../options'
-import {SessionStore} from '../session'
-import {clearCookies} from '../cookies'
 import qs from 'qs'
+import {DefaultErrorResponse, qsOfErrorResponse} from '../status'
+
+import type {Context} from '../context'
+import type {Options} from '../options'
+import type {SessionStore} from '../session'
+import {clearCookies} from '../cookies'
+import type {OpenIdClientMiddleware} from './types'
+import {pathsMatch, redirectResponse} from './util'
 
 export const signOutMiddleware = (
     pathname: string,
