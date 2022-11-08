@@ -1,12 +1,13 @@
-import {Client, generators} from 'openid-client'
-import {DefaultErrorResponse, qsOfErrorResponse} from '../status'
-import {pathFromReferer, pathsMatch, redirectResponse} from './util'
-
-import {Context} from '../context'
-import {OpenIdClientMiddleware} from './types'
-import {Options} from '../options'
-import {SessionStore} from '../session'
+import type {Client} from 'openid-client'
+import {generators} from 'openid-client'
 import crs from 'crypto-random-string'
+import {DefaultErrorResponse, qsOfErrorResponse} from '../status'
+
+import type {Context} from '../context'
+import type {Options} from '../options'
+import type {SessionStore} from '../session'
+import type {OpenIdClientMiddleware} from './types'
+import {pathFromReferer, pathsMatch, redirectResponse} from './util'
 
 export const signInMiddleware = (
     client: Client,
@@ -26,7 +27,7 @@ export const signInMiddleware = (
                     length: 16
                 })
                 let authUrl
-                let codeVerifier: string | null = null
+                let codeVerifier: string | undefined = undefined
 
                 if (enablePKCE) {
                     ctx.log.debug('building authUrl with code_verifier')

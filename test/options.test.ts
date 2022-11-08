@@ -1,6 +1,5 @@
-import {OptionsError, resolveOptions} from '../src/options'
-
 import test from 'ava'
+import {OptionsError, resolveOptions} from '../src/options'
 
 test('resolveOptions should fail when no env are set', t => {
     t.throws(() => resolveOptions(), {
@@ -22,11 +21,8 @@ test('resolveOptions pass with the minimum required envs', t => {
     process.env.OPENID_CLIENT_ID = testClientId
     process.env.OPENID_SESSION_KEYS = testSessionKeys
 
-    const {
-        clientMetadata,
-        clientServerOptions,
-        sessionOptions
-    } = resolveOptions()
+    const {clientMetadata, clientServerOptions, sessionOptions} =
+        resolveOptions()
 
     process.env.OPENID_CLIENT_ID = originalClientId
     process.env.OPENID_DISCOVERY_ENDPOINT = originalDiscoveryEndpoint
@@ -56,12 +52,8 @@ test('resolveOptions pass with the proxy params passed', t => {
     process.env.OPENID_PROXY_EXCLUDE_COOKIE = excludeCookie
     process.env.OPENID_PROXY_HOSTS = proxyHosts
 
-    const {
-        clientMetadata,
-        clientServerOptions,
-        sessionOptions,
-        proxyOptions
-    } = resolveOptions()
+    const {clientMetadata, clientServerOptions, sessionOptions, proxyOptions} =
+        resolveOptions()
 
     process.env.OPENID_CLIENT_ID = originalClientId
     process.env.OPENID_DISCOVERY_ENDPOINT = originalDiscoveryEndpoint

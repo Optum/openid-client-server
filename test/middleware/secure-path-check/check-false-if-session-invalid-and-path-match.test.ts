@@ -1,18 +1,17 @@
+import type {IncomingMessage, ServerResponse} from 'http'
+import {parse} from 'url'
+import type {Client, IdTokenClaims} from 'openid-client'
+import sinon, {stubInterface} from 'ts-sinon'
+import type {Logger} from 'pino'
+import crs from 'crypto-random-string'
+import test from 'ava'
 import * as util from '../../../src/middleware/util'
 
-import {Client, IdTokenClaims} from 'openid-client'
-import {IncomingMessage, ServerResponse} from 'http'
-import sinon, {stubInterface} from 'ts-sinon'
-
-import {Logger} from 'pino'
 import {MemorySessionStore} from '../../../src/session'
 import {makeOptionsWithSecurePaths} from '../../helpers/test-options'
 import {createContext} from '../../../src/context'
-import crs from 'crypto-random-string'
 // eslint-disable-next-line node/no-deprecated-api
-import {parse} from 'url'
 import {securePathCheckMiddleware} from '../../../src/middleware/secure-path-check-middleware'
-import test from 'ava'
 
 const testPath = '/dashboard'
 
@@ -23,14 +22,14 @@ const redirectStub = sinon.stub(util, 'redirectResponse')
 test('securePathCheckMiddleware check false if invalid session and path match', async t => {
     const sessionStore = new MemorySessionStore()
     const clientStub = stubInterface<Client>()
-    const reqStub = stubInterface<IncomingMessage>()
+    const requestStub = stubInterface<IncomingMessage>()
     const resStub = stubInterface<ServerResponse>()
     const idTokenClaimsStrub = stubInterface<IdTokenClaims>()
     const loggerStub = stubInterface<Logger>()
 
     const parsedUrl = parse(`http://unit-test.test${testPath}`, true)
 
-    const ctx = createContext(reqStub, resStub, parsedUrl, loggerStub)
+    const ctx = createContext(requestStub, resStub, parsedUrl, loggerStub)
     ctx.sessionId = crs({length: 10})
 
     const tokenSet = {

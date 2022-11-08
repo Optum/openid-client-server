@@ -1,17 +1,17 @@
+import type {IncomingMessage, ServerResponse} from 'http'
+import type {UrlWithParsedQuery} from 'url'
+import sinon, {stubInterface} from 'ts-sinon'
+import type {Client} from 'openid-client'
+import type {Logger} from 'pino'
+import test from 'ava'
 import * as util from '../../../src/middleware/util'
 
 import {AccessDeniedErrorResponse, qsOfErrorResponse} from '../../../src/status'
-import {IncomingMessage, ServerResponse} from 'http'
-import sinon, {stubInterface} from 'ts-sinon'
 
-import {Client} from 'openid-client'
-import {Logger} from 'pino'
 import {MemorySessionStore} from '../../../src/session'
 import {makeOptionsWithSecurePaths} from '../../helpers/test-options'
-import {UrlWithParsedQuery} from 'url'
 import {createContext} from '../../../src/context'
 import {securePathCheckMiddleware} from '../../../src/middleware/secure-path-check-middleware'
-import test from 'ava'
 
 const redirectStub = sinon.stub(util, 'redirectResponse')
 
@@ -22,12 +22,12 @@ const testOptions = makeOptionsWithSecurePaths([testPath])
 test('securePathCheckMiddleware should redirect access denied when no session id', async t => {
     const sessionStore = new MemorySessionStore()
     const clientStub = stubInterface<Client>()
-    const reqStub = stubInterface<IncomingMessage>()
+    const requestStub = stubInterface<IncomingMessage>()
     const resStub = stubInterface<ServerResponse>()
     const urlStub = stubInterface<UrlWithParsedQuery>()
     const loggerStub = stubInterface<Logger>()
 
-    const ctx = createContext(reqStub, resStub, urlStub, loggerStub)
+    const ctx = createContext(requestStub, resStub, urlStub, loggerStub)
 
     const middleware = securePathCheckMiddleware(
         testOptions,

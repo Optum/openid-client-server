@@ -1,11 +1,10 @@
-import {OpenIdClientMiddleware, ProxyParams} from './types'
+import {AccessDeniedErrorResponse} from '../status'
+import type {Context} from '../context'
+import type {OpenIdClientMiddleware, ProxyParams} from './types'
 import {executeRequest, pathsMatch, sendJsonResponse} from './util'
 
-import {AccessDeniedErrorResponse} from '../status'
-import {Context} from '../context'
-
 export const proxyMiddleware = (
-    proxyParams: ProxyParams
+    proxyParameters: ProxyParams
 ): OpenIdClientMiddleware => {
     const {
         host,
@@ -15,7 +14,7 @@ export const proxyMiddleware = (
         useIdToken,
         sessionStore,
         client
-    } = proxyParams
+    } = proxyParameters
     const {status_code: accessDeniedStatusCode} = AccessDeniedErrorResponse
     return async (ctx: Context): Promise<Context> => {
         if (pathsMatch(ctx.url, pathname)) {

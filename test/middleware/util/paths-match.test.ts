@@ -1,7 +1,7 @@
 // eslint-disable-next-line node/no-deprecated-api
 import {parse} from 'url'
-import {pathsMatch} from '../../../src/middleware/util'
 import test from 'ava'
+import {pathsMatch} from '../../../src/middleware/util'
 
 test('pathsMatch should detect base path matches', t => {
     const testUrl = 'http://unit-test.test/resources/123/items/456'

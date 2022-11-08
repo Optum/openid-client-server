@@ -1,21 +1,18 @@
-import {Client, IssuerMetadata} from 'openid-client'
-import {
-    GetPublicKeyOrSecret,
-    Secret,
-    VerifyCallback,
-    verify as jwtVerify
-} from 'jsonwebtoken'
-import createAsyncPipe, {Pipeline} from 'p-pipe'
-import {createUserInfoFromJwtService, withBreaker} from './util'
-
-import {Context} from '../context'
-import {OpenIdClientMiddleware} from './types'
-import {Options} from '../options'
-import {SessionStore} from '../session'
-import {callbackMiddleware} from './callback-middleware'
-import {cookiesMiddleware} from './cookies-middleware'
+import type {Client, IssuerMetadata} from 'openid-client'
+import type {GetPublicKeyOrSecret, Secret, VerifyCallback} from 'jsonwebtoken'
+import {verify as jwtVerify} from 'jsonwebtoken'
+import type {Pipeline} from 'p-pipe'
+import createAsyncPipe from 'p-pipe'
 import jwksClient from 'jwks-rsa'
 import ms from 'ms'
+import type {Context} from '../context'
+import type {Options} from '../options'
+import type {SessionStore} from '../session'
+import {createUserInfoFromJwtService, withBreaker} from './util'
+
+import type {OpenIdClientMiddleware} from './types'
+import {callbackMiddleware} from './callback-middleware'
+import {cookiesMiddleware} from './cookies-middleware'
 import {processCallbackMiddleware} from './process-callback-middleware'
 import {proxyMiddleware} from './proxy-middleware'
 import {signInMiddleware} from './signin-middleware'
@@ -52,7 +49,9 @@ export const createMiddleware = (
             token: string,
             secretOrPublicKey: Secret | GetPublicKeyOrSecret,
             callback?: VerifyCallback
-        ): void => jwtVerify(token, secretOrPublicKey, callback)
+        ): void => {
+            jwtVerify(token, secretOrPublicKey, callback)
+        }
     )
 
     const coreMiddlewares: OpenIdClientMiddleware[] = [
@@ -161,7 +160,7 @@ export const createMiddleware = (
         }
     }
 
-    if (proxyMiddlewares.length !== 0) {
+    if (proxyMiddlewares.length > 0) {
         const proxyPipeline = createAsyncPipe(...proxyMiddlewares) as Pipeline<
             Context,
             Context

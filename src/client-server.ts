@@ -1,7 +1,11 @@
-import {Options, resolveOptions} from './options'
-import {MemorySessionStore, SessionStore} from './session'
-import {ContentHandler, createRequestListener} from './request-listener'
-import {Server, createServer} from 'http'
+import type {Server} from 'http'
+import {createServer} from 'http'
+import type {Options} from './options'
+import {resolveOptions} from './options'
+import type {SessionStore} from './session'
+import {MemorySessionStore} from './session'
+import type {ContentHandler} from './request-listener'
+import {createRequestListener} from './request-listener'
 
 export const clientServer = async (options: {
     coreOptions?: Options

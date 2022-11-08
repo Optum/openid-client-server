@@ -1,15 +1,15 @@
-import {clone} from '../../../src/middleware/util'
 import test from 'ava'
+import {clone} from '../../../src/middleware/util'
 
 test('clone should create a plain object from a json string based on the original object', t => {
-    const testObj = {
+    const testObject = {
         something: 'thing1',
         somethingElse: 'thing2'
     }
 
-    const testCloneObj = clone(testObj)
+    const testCloneObject = clone(testObject)
 
-    t.false(testObj === testCloneObj)
-    t.is(testCloneObj.something, testObj.something)
-    t.is(testCloneObj.somethingElse, testObj.somethingElse)
+    t.false(testObject === testCloneObject)
+    t.is(testCloneObject.something, testObject.something)
+    t.is(testCloneObject.somethingElse, testObject.somethingElse)
 })

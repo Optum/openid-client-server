@@ -1,12 +1,13 @@
-import {ClientServerOptions, Options} from '../../../src/options'
-import {Context, createContext} from '../../../src/context'
-import {IncomingMessage, ServerResponse} from 'http'
-import sinon, {stubInterface} from 'ts-sinon'
+import type {IncomingMessage, ServerResponse} from 'http'
 
-import {Logger} from 'pino'
-// eslint-disable-next-line node/no-deprecated-api
 import {parse} from 'url'
+import type {Logger} from 'pino'
+// eslint-disable-next-line node/no-deprecated-api
+import sinon, {stubInterface} from 'ts-sinon'
 import test from 'ava'
+import {createContext} from '../../../src/context'
+import type {Context} from '../../../src/context'
+import type {ClientServerOptions, Options} from '../../../src/options'
 import {withBreaker} from '../../../src/middleware/util'
 
 test('withBreaker pass through when url.pathname is undefined', async t => {
@@ -27,7 +28,7 @@ test('withBreaker pass through when url.pathname is undefined', async t => {
 
 test('withBreaker should skip if path is error page', async t => {
     const testName = 'test-middleware'
-    const reqStub = stubInterface<IncomingMessage>()
+    const requestStub = stubInterface<IncomingMessage>()
     const resStub = stubInterface<ServerResponse>()
     const testOptions = stubInterface<Options>()
     const testClientServerOptions = stubInterface<ClientServerOptions>()
@@ -38,7 +39,12 @@ test('withBreaker should skip if path is error page', async t => {
     const testMw = sinon.stub()
     const testUrl = 'http://unit-test.test/openid-error'
     const parsedUrl = parse(testUrl, true)
-    const testContext = createContext(reqStub, resStub, parsedUrl, loggerStub)
+    const testContext = createContext(
+        requestStub,
+        resStub,
+        parsedUrl,
+        loggerStub
+    )
     testContext.url = parse(testUrl, true)
     const breakerMw = withBreaker(testMw, testOptions, testName)
 
@@ -50,7 +56,7 @@ test('withBreaker should skip if path is error page', async t => {
 
 test('withBreaker should skip of context is done', async t => {
     const testName = 'test-middleware'
-    const reqStub = stubInterface<IncomingMessage>()
+    const requestStub = stubInterface<IncomingMessage>()
     const resStub = stubInterface<ServerResponse>()
     const testOptions = stubInterface<Options>()
     const testClientServerOptions = stubInterface<ClientServerOptions>()
@@ -61,7 +67,12 @@ test('withBreaker should skip of context is done', async t => {
     const testMw = sinon.stub()
     const testUrl = 'http://unit-test.test/resources/123/items/456'
     const parsedUrl = parse(testUrl, true)
-    const testContext = createContext(reqStub, resStub, parsedUrl, loggerStub)
+    const testContext = createContext(
+        requestStub,
+        resStub,
+        parsedUrl,
+        loggerStub
+    )
     testContext.done = true
     testContext.url = parse(testUrl, true)
     const breakerMw2 = withBreaker(testMw, testOptions, testName)
@@ -74,7 +85,7 @@ test('withBreaker should skip of context is done', async t => {
 
 test('withBreaker should invoke mw when expected', async t => {
     const testName = 'test-middleware'
-    const reqStub = stubInterface<IncomingMessage>()
+    const requestStub = stubInterface<IncomingMessage>()
     const resStub = stubInterface<ServerResponse>()
     const testOptions = stubInterface<Options>()
     const testClientServerOptions = stubInterface<ClientServerOptions>()
@@ -84,7 +95,12 @@ test('withBreaker should invoke mw when expected', async t => {
 
     const testUrl = 'http://unit-test.test/resources/123/items/456'
     const parsedUrl = parse(testUrl, true)
-    const testContext = createContext(reqStub, resStub, parsedUrl, loggerStub)
+    const testContext = createContext(
+        requestStub,
+        resStub,
+        parsedUrl,
+        loggerStub
+    )
     const testMw = sinon.stub().resolves(testContext)
     const breakerMw = withBreaker(testMw, testOptions, testName)
 

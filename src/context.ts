@@ -1,32 +1,32 @@
-import {IncomingMessage, ServerResponse} from 'http'
+import type {IncomingMessage, ServerResponse} from 'http'
 
-import {Logger} from 'pino'
-import {TokenSet} from 'openid-client'
-import {UrlWithParsedQuery} from 'url'
+import type {UrlWithParsedQuery} from 'url'
+import type {Logger} from 'pino'
+import type {TokenSet} from 'openid-client'
 
-export interface Context {
+export type Context = {
     req: IncomingMessage
     res: ServerResponse
     url: UrlWithParsedQuery
     log: Logger
-    sessionId: string | null
-    tokenSet: TokenSet | null
+    sessionId: string | undefined
+    tokenSet: TokenSet | undefined
     done: boolean
 }
 
 export const createContext = (
-    req: IncomingMessage,
+    request: IncomingMessage,
     res: ServerResponse,
     url: UrlWithParsedQuery,
     log: Logger
 ): Context => {
     return {
-        req,
+        req: request,
         res,
         url,
         log,
-        sessionId: null,
-        tokenSet: null,
+        sessionId: undefined,
+        tokenSet: undefined,
         done: false
     }
 }

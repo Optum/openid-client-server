@@ -1,7 +1,7 @@
-import {BasicType, BasicTypeArray} from './json'
-import {LoggerOptions} from 'pino'
+import type {LoggerOptions} from 'pino'
 
-import {ClientMetadata} from 'openid-client'
+import type {ClientMetadata} from 'openid-client'
+import type {BasicType, BasicTypeArray} from './json'
 
 export class OptionsError extends Error {
     constructor(message: string) {
@@ -10,7 +10,7 @@ export class OptionsError extends Error {
     }
 }
 
-export interface ClientServerOptions {
+export type ClientServerOptions = {
     discoveryEndpoint: string
     scope?: string
     enablePKCE: boolean
@@ -29,13 +29,13 @@ export interface ClientServerOptions {
     emitEvents?: boolean
 }
 
-export interface SessionOptions {
+export type SessionOptions = {
     sessionName: string
     sessionKeys: string[]
     sameSite: boolean
 }
 
-export interface ProxyOptions {
+export type ProxyOptions = {
     proxyPaths: string[]
     proxyHosts: string[]
     excludeCookie: boolean[]
@@ -43,7 +43,7 @@ export interface ProxyOptions {
     excludeOriginHeaders: boolean[]
 }
 
-export interface Options {
+export type Options = {
     clientServerOptions: ClientServerOptions
     sessionOptions: SessionOptions
     clientMetadata: ClientMetadata
@@ -52,9 +52,9 @@ export interface Options {
     proxyOptions: ProxyOptions
 }
 
-type Empty = null
+type Empty = undefined
 
-interface EnvMapItem {
+type EnvMapItem = {
     propKey: string
     envKey: string
     /**
@@ -421,7 +421,7 @@ const castValue = (
     value: string
 ): string | number | boolean => {
     if (typeof defaultValue === 'number') {
-        return parseInt(value, 10)
+        return Number.parseInt(value, 10)
     }
 
     if (typeof defaultValue === 'boolean') {
@@ -431,15 +431,13 @@ const castValue = (
     return value
 }
 
-interface ParsedOptions {
-    options: {[x: string]: any}
+type ParsedOptions = {
+    options: Record<string, any>
     errors: string[]
 }
 
 const parseOptions = (envMapItems: EnvMapItem[]): ParsedOptions => {
-    const options: {
-        [x: string]: any
-    } = {}
+    const options: Record<string, any> = {}
     const errors: string[] = []
     for (const emi of envMapItems) {
         const value = process.env[emi.envKey]
@@ -462,8 +460,8 @@ const parseOptions = (envMapItems: EnvMapItem[]): ParsedOptions => {
             const values = value.split(',')
             const castValues: BasicTypeArray = []
             const firstElement = emi.defaultValue[0]
-            for (const val of values) {
-                castValues.push(castValue(firstElement, val))
+            for (const value_ of values) {
+                castValues.push(castValue(firstElement, value_))
             }
 
             options[emi.propKey] = castValues
@@ -493,7 +491,7 @@ export const resolveOptions = (): Options => {
         .concat(parsedDefaultLogOptions.errors)
         .concat(parsedProxyOptions.errors)
 
-    if (errors.length !== 0) {
+    if (errors.length > 0) {
         throw new OptionsError(`Options Errors:\n${errors.join('\n')}`)
     }
 

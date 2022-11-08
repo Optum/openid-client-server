@@ -1,10 +1,10 @@
-import {GetPublicKeyOrSecret, Secret, VerifyCallback} from 'jsonwebtoken'
+import type {GetPublicKeyOrSecret, Secret, VerifyCallback} from 'jsonwebtoken'
 import sinon, {stubInterface} from 'ts-sinon'
 
-import {createUserInfoFromJwtService} from '../../../src/middleware/util'
-import jwksClient from 'jwks-rsa'
+import type jwksClient from 'jwks-rsa'
 import test from 'ava'
 import {v4 as uuid} from 'uuid'
+import {createUserInfoFromJwtService} from '../../../src/middleware/util'
 
 const jwtVerifyStub = sinon
     .stub()
@@ -26,11 +26,11 @@ const jwtVerifyStub = sinon
                 const getKey = secretOrPublicKey as GetPublicKeyOrSecret
 
                 const signingKeyCallback = (
-                    err: any,
+                    error: any,
                     signingKey?: Secret
                 ): void => {
-                    if (err) {
-                        throw err
+                    if (error) {
+                        throw error
                     }
 
                     if (!signingKey) {
@@ -38,7 +38,7 @@ const jwtVerifyStub = sinon
                     }
 
                     if (callback) {
-                        callback(err, body)
+                        callback(error, body)
                     }
                 }
 
@@ -102,7 +102,7 @@ test('userInfoFromJwt should return jwt body as json', async t => {
     jwksClientStub.getSigningKey.callsFake(
         (
             kid: string,
-            cb: (err: Error | null, key: jwksClient.SigningKey) => void
+            cb: (error: Error | undefined, key: jwksClient.SigningKey) => void
         ): void => {
             t.is(kid, testJwtParts.header.kid)
             cb(null, signingKeyStub)

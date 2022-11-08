@@ -1,13 +1,17 @@
-import {Client, Issuer} from 'openid-client'
-import {Context, createContext} from './context'
-import {IncomingMessage, RequestListener, ServerResponse} from 'http'
-// eslint-disable-next-line node/no-deprecated-api
-import {UrlWithParsedQuery, parse} from 'url'
-import pino, {Logger} from 'pino'
-
+import type {IncomingMessage, RequestListener, ServerResponse} from 'http'
+import type {UrlWithParsedQuery} from 'url'
+import {parse} from 'url'
 import {EventEmitter} from 'events'
-import {Options} from './options'
-import {SessionStore} from './session'
+import type {Client} from 'openid-client'
+import {Issuer} from 'openid-client'
+import type {Logger} from 'pino'
+import pino from 'pino'
+import type {Context} from './context'
+import {createContext} from './context'
+// eslint-disable-next-line node/no-deprecated-api
+
+import type {Options} from './options'
+import type {SessionStore} from './session'
 import {createMiddleware} from './middleware'
 import {securePathCheckMiddleware} from './middleware/secure-path-check-middleware'
 
@@ -20,7 +24,7 @@ export const RequestListenerEvents = {
 export const RequestListenerEventEmitter = new EventEmitter()
 
 export type ContentHandler = (
-    req: IncomingMessage,
+    request: IncomingMessage,
     res: ServerResponse,
     parsedUrl?: UrlWithParsedQuery | undefined
 ) => Promise<void>
@@ -63,11 +67,9 @@ export const createRequestListener = async (
 
     let log: Logger
 
-    if (loggerDestination) {
-        log = pino(loggerOptions, loggerDestination)
-    } else {
-        log = pino(loggerOptions)
-    }
+    log = loggerDestination
+        ? pino(loggerOptions, loggerDestination)
+        : pino(loggerOptions)
 
     const middleware = createMiddleware(
         issuer.metadata,
@@ -95,12 +97,12 @@ export const createRequestListener = async (
     )
 
     /* eslint-disable promise/prefer-await-to-then */
-    return (req: IncomingMessage, res: ServerResponse): void => {
+    return (request: IncomingMessage, res: ServerResponse): void => {
         emitEvent(RequestListenerEvents.STARTED)
-        if (req.url) {
-            const parsedUrl = parse(req.url, true)
+        if (request.url) {
+            const parsedUrl = parse(request.url, true)
 
-            middleware(createContext(req, res, parsedUrl, log))
+            middleware(createContext(request, res, parsedUrl, log))
                 .then(async (ctx: Context) => {
                     if (ctx.done) {
                         log.info(
@@ -118,7 +120,7 @@ export const createRequestListener = async (
                                         parsedUrl.pathname
                                     )} for session ${String(ctx.sessionId)}`
                                 )
-                                await requestHandler(req, res, parsedUrl)
+                                await requestHandler(request, res, parsedUrl)
                                 emitEvent(RequestListenerEvents.COMPLETED)
                             } else {
                                 log.debug(
@@ -137,21 +139,25 @@ export const createRequestListener = async (
                         emitEvent(RequestListenerEvents.COMPLETED)
                     }
                 })
-                .catch(error =>
-                    emitEvent(RequestListenerEvents.ERROR, () =>
+                .catch(error => {
+                    emitEvent(RequestListenerEvents.ERROR, () => {
                         log.error(error)
-                    )
-                )
+                    })
+                })
         } else if (requestHandler) {
             log.debug('req url not defined. invoking requestHandler')
-            requestHandler(req, res)
-                .then(() => log.debug('requestHandler complete'))
-                .then(() => emitEvent(RequestListenerEvents.COMPLETED))
-                .catch(error =>
-                    emitEvent(RequestListenerEvents.ERROR, () =>
+            requestHandler(request, res)
+                .then(() => {
+                    log.debug('requestHandler complete')
+                })
+                .then(() => {
+                    emitEvent(RequestListenerEvents.COMPLETED)
+                })
+                .catch(error => {
+                    emitEvent(RequestListenerEvents.ERROR, () => {
                         log.error(error)
-                    )
-                )
+                    })
+                })
         } else {
             log.debug('req url & requestHandler not defined')
             emitEvent(RequestListenerEvents.COMPLETED)

@@ -1,9 +1,11 @@
+import {PassThrough} from 'node:stream'
 import {Request, Response} from 'mock-http'
-import {PassThrough} from 'stream'
-import {createRequestListener, resolveOptions} from '../../src'
 import nock from 'nock'
+import sinon, {stubObject} from 'ts-sinon'
+import test from 'ava'
+import {createRequestListener, resolveOptions} from '../../src'
 import {MemorySessionStore} from '../../src/session'
-import {Options} from '../../src/options'
+import type {Options} from '../../src/options'
 import {
     discoveryPath,
     issuer,
@@ -11,8 +13,6 @@ import {
     testOptions
 } from '../helpers/test-options'
 import {clone} from '../../src/middleware/util'
-import sinon, {stubObject} from 'ts-sinon'
-import test from 'ava'
 
 test.beforeEach(t => {
     t.context = nock(issuer)
@@ -28,10 +28,10 @@ test('createRequestListener & resolveOptions should exist', t => {
 test('createRequestListener should do nothing if req.url is undefined and requestHandler is not provided', async t => {
     const sessionStore = new MemorySessionStore()
     const logWriteStub = sinon.stub()
-    const reqMock = new Request()
+    const requestMock = new Request()
     const resMock = new Response()
 
-    reqMock.url = undefined
+    requestMock.url = undefined
 
     const options = clone(testOptions) as Options
     options.loggerOptions.level = 'debug'
@@ -44,7 +44,7 @@ test('createRequestListener should do nothing if req.url is undefined and reques
 
     const requestListener = await createRequestListener(options, sessionStore)
 
-    requestListener(reqMock, resMock)
+    requestListener(requestMock, resMock)
 
     t.is(logWriteStub.callCount, 3)
     t.is(
@@ -56,10 +56,10 @@ test('createRequestListener should do nothing if req.url is undefined and reques
 test('createRequestListener should pass request to provided handler if req.url is undefined', async t => {
     const sessionStore = new MemorySessionStore()
     const requestHandlerStub = sinon.stub().resolves('OK')
-    const reqMock = new Request()
+    const requestMock = new Request()
     const resMock = new Response()
 
-    reqMock.url = undefined
+    requestMock.url = undefined
 
     const requestListener = await createRequestListener(
         testOptions,
@@ -67,10 +67,10 @@ test('createRequestListener should pass request to provided handler if req.url i
         requestHandlerStub
     )
 
-    requestListener(reqMock, resMock)
+    requestListener(requestMock, resMock)
 
     t.true(requestHandlerStub.calledOnce)
-    t.is(requestHandlerStub.args[0][0], reqMock)
+    t.is(requestHandlerStub.args[0][0], requestMock)
     t.is(requestHandlerStub.args[0][1], resMock)
     t.is(requestHandlerStub.args[0][2], undefined)
 })

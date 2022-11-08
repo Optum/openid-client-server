@@ -1,11 +1,10 @@
-import {OpenIdClientMiddleware, UserInfoParams} from './types'
+import {AccessDeniedErrorResponse} from '../status'
+import type {Context} from '../context'
+import type {OpenIdClientMiddleware, UserInfoParams} from './types'
 import {pathsMatch, sendJsonResponse} from './util'
 
-import {AccessDeniedErrorResponse} from '../status'
-import {Context} from '../context'
-
 export const userInfoMiddleware = (
-    userInfoParams: UserInfoParams
+    userInfoParameters: UserInfoParams
 ): OpenIdClientMiddleware => {
     const {status_code: accessDeniedStatusCode} = AccessDeniedErrorResponse
     return async (ctx: Context): Promise<Context> => {
@@ -15,7 +14,7 @@ export const userInfoMiddleware = (
             sessionStore,
             options,
             userInfoFromJwtService: {userInfoFromJwt}
-        } = userInfoParams
+        } = userInfoParameters
         try {
             if (pathsMatch(ctx.url, pathname)) {
                 if (!ctx.sessionId) {

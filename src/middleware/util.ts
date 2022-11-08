@@ -1,9 +1,7 @@
-import {
-    ExecuteProxyRequestParams,
-    OpenIdClientMiddleware,
-    UserInfoFromJwtService
-} from './types'
-import {
+import type {IncomingMessage, ServerResponse} from 'http'
+import type {UrlWithParsedQuery} from 'url'
+import {URL} from 'url'
+import type {
     GetPublicKeyOrSecret,
     JwtHeader,
     Secret,
@@ -11,16 +9,21 @@ import {
     VerifyCallback,
     VerifyErrors
 } from 'jsonwebtoken'
-import {IncomingMessage, ServerResponse} from 'http'
-import {URL, UrlWithParsedQuery} from 'url'
-import fetch, {Headers} from 'node-fetch'
+import type {Headers} from 'node-fetch'
+import fetch from 'node-fetch'
 
-import {Context} from '../context'
-import {DefaultErrorResponse, ErrorResponse} from '../status'
-import {Json} from '../json'
-import {Options} from '../options'
-import {UserinfoResponse} from 'openid-client'
-import jwksClient from 'jwks-rsa'
+import type {UserinfoResponse} from 'openid-client'
+import type jwksClient from 'jwks-rsa'
+import type {Context} from '../context'
+import type {ErrorResponse} from '../status'
+import {DefaultErrorResponse} from '../status'
+import type {Json} from '../json'
+import type {Options} from '../options'
+import type {
+    ExecuteProxyRequestParams,
+    OpenIdClientMiddleware,
+    UserInfoFromJwtService
+} from './types'
 
 export const clone = (json: any): any => JSON.parse(JSON.stringify(json))
 const {status_code: defaultErrorResponseStatusCode} = DefaultErrorResponse
@@ -97,24 +100,25 @@ export const createUserInfoFromJwtService = (
         callback?: VerifyCallback
     ) => void
 ): UserInfoFromJwtService => ({
-    userInfoFromJwt: async (token: string): Promise<Json> => {
+    async userInfoFromJwt(token: string): Promise<Json> {
         return new Promise((resolve, reject) => {
             function getKey(
                 header: JwtHeader,
                 callback: SigningKeyCallback
             ): void {
                 if (!header.kid || !header.alg) {
-                    return reject(new Error('invalid jwt header'))
+                    reject(new Error('invalid jwt header'))
+                    return
                 }
 
                 jwksClientInstance.getSigningKey(
                     header.kid,
-                    (err: Error | null, key: jwksClient.SigningKey): void => {
+                    (error: Error | null, key: jwksClient.SigningKey): void => {
                         const _key = key
                         const signingKey =
                             _key.getPublicKey() ||
                             (_key as jwksClient.RsaSigningKey).rsaPublicKey
-                        callback(err, signingKey)
+                        callback(error, signingKey)
                     }
                 )
             }
@@ -122,12 +126,14 @@ export const createUserInfoFromJwtService = (
             jwtVerify(
                 token,
                 getKey,
+                // @ts-ignore
                 (
-                    err: VerifyErrors | null,
-                    decoded: object | undefined
+                    error: VerifyErrors | null,
+                    decoded: Record<string, unknown> | undefined
                 ): void => {
-                    if (err) {
-                        return reject(err)
+                    if (error) {
+                        reject(error)
+                        return
                     }
 
                     resolve(decoded as Json)
@@ -137,15 +143,15 @@ export const createUserInfoFromJwtService = (
     }
 })
 
-export const parseBody = async (req: IncomingMessage): Promise<string> => {
+export const parseBody = async (request: IncomingMessage): Promise<string> => {
     return new Promise(resolve => {
         let body = ''
 
-        req.on('data', (chunk: string) => {
+        request.on('data', (chunk: string) => {
             body += chunk
         })
 
-        req.on('end', () => {
+        request.on('end', () => {
             resolve(body)
         })
     })
@@ -193,7 +199,7 @@ export const pathFromReferer = (referer: string): string => {
 }
 
 export const executeRequest = async (
-    executeParams: ExecuteProxyRequestParams
+    executeParameters: ExecuteProxyRequestParams
 ): Promise<void> => {
     const {
         token,
@@ -203,7 +209,7 @@ export const executeRequest = async (
         pathname,
         ctx,
         method
-    } = executeParams
+    } = executeParameters
     const {headers} = ctx.req
     const {path} = ctx.url
     let body = ''
@@ -218,28 +224,28 @@ export const executeRequest = async (
         body = await parseBody(ctx.req)
     }
 
-    let reqHeaders = clone(headers)
+    let requestHeaders = clone(headers)
 
     if (excludeOriginHeaders) {
-        reqHeaders = {}
+        requestHeaders = {}
     }
 
-    reqHeaders.authorization = `Bearer ${token}`
+    requestHeaders.authorization = `Bearer ${token}`
 
     if (excludeCookie) {
-        delete reqHeaders.cookie
+        delete requestHeaders.cookie
     }
 
     const requestPath = String(path).replace(pathname, '')
     const requestUrl = new URL(`${host}${requestPath}`)
-    reqHeaders.host = requestUrl.hostname
+    requestHeaders.host = requestUrl.hostname
 
     ctx.log.debug(`fetching ${requestUrl.href}`)
 
     try {
         const response = await fetch(requestUrl.href, {
             method: normalizedMethod,
-            headers: reqHeaders as Headers,
+            headers: requestHeaders as Headers,
             body: includeBody ? body : undefined
         })
 

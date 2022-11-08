@@ -1,7 +1,7 @@
-import {ServerResponse} from 'http'
-import {showResponse} from '../../../src/middleware/util'
+import type {ServerResponse} from 'http'
 import {stubInterface} from 'ts-sinon'
 import test from 'ava'
+import {showResponse} from '../../../src/middleware/util'
 
 test('sendJsonResponse should set location as expected', t => {
     const resStub = stubInterface<ServerResponse>()

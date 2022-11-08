@@ -1,17 +1,16 @@
+import type {IncomingMessage, ServerResponse} from 'http'
+import type {UrlWithParsedQuery} from 'url'
+import sinon, {stubInterface} from 'ts-sinon'
+import type {Client} from 'openid-client'
+import type {Logger} from 'pino'
+import test from 'ava'
 import * as util from '../../../src/middleware/util'
 
-import {IncomingMessage, ServerResponse} from 'http'
-import sinon, {stubInterface} from 'ts-sinon'
-
-import {Client} from 'openid-client'
-import {Logger} from 'pino'
 import {MemorySessionStore} from '../../../src/session'
-import {Options} from '../../../src/options'
+import type {Options} from '../../../src/options'
 import {testOptions} from '../../helpers/test-options'
-import {UrlWithParsedQuery} from 'url'
 import {createContext} from '../../../src/context'
 import {signInMiddleware} from '../../../src/middleware/signin-middleware'
-import test from 'ava'
 
 const redirectStub = sinon.stub(util, 'redirectResponse')
 
@@ -33,13 +32,13 @@ test('signInMiddleware should include scope in auth url if included in clientSer
         store
     )
 
-    const reqStub = stubInterface<IncomingMessage>()
+    const requestStub = stubInterface<IncomingMessage>()
     const resStub = stubInterface<ServerResponse>()
     const urlStub = stubInterface<UrlWithParsedQuery>()
     const loggerStub = stubInterface<Logger>()
     urlStub.pathname = signInPath
 
-    let ctx = createContext(reqStub, resStub, urlStub, loggerStub)
+    let ctx = createContext(requestStub, resStub, urlStub, loggerStub)
     ctx.sessionId = unitTestSessionId
     clientStub.authorizationUrl.returns(unitTestAuthUrl)
 

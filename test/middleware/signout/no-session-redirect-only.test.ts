@@ -1,18 +1,18 @@
-import * as util from '../../../src/middleware/util'
-
-import {IncomingMessage, ServerResponse} from 'http'
-import {Session, SessionStore} from '../../../src/session'
+import type {IncomingMessage, ServerResponse} from 'http'
+import type {UrlWithParsedQuery} from 'url'
 import sinon, {stubInterface} from 'ts-sinon'
-
-import {IdTokenClaims} from 'openid-client'
-import {Logger} from 'pino'
-import {testOptions} from '../../helpers/test-options'
-import {UrlWithParsedQuery} from 'url'
-import {createContext} from '../../../src/context'
+import type {IdTokenClaims} from 'openid-client'
+import type {Logger} from 'pino'
 import crs from 'crypto-random-string'
-import {signOutMiddleware} from '../../../src/middleware/signout-middleware'
 import test from 'ava'
 import {v4 as uuid} from 'uuid'
+import * as util from '../../../src/middleware/util'
+
+import type {Session, SessionStore} from '../../../src/session'
+
+import {testOptions} from '../../helpers/test-options'
+import {createContext} from '../../../src/context'
+import {signOutMiddleware} from '../../../src/middleware/signout-middleware'
 
 const redirectStub = sinon.stub(util, 'redirectResponse')
 
@@ -36,10 +36,10 @@ test('signOutMiddleware should redirect to logout when no session found', async 
         codeVerifier: '',
         userInfo: {sub: ''},
         tokenSet: {
-            expired: () => {
+            expired() {
                 return false
             },
-            claims: () => {
+            claims() {
                 return claims
             }
         },
@@ -54,14 +54,14 @@ test('signOutMiddleware should redirect to logout when no session found', async 
 
     const signout = signOutMiddleware(signOutPath, testOptions, storeStub)
 
-    const reqStub = stubInterface<IncomingMessage>()
+    const requestStub = stubInterface<IncomingMessage>()
     const resStub = stubInterface<ServerResponse>()
     const urlStub = stubInterface<UrlWithParsedQuery>()
     const loggerStub = stubInterface<Logger>()
 
     urlStub.pathname = signOutPath
 
-    let ctx = createContext(reqStub, resStub, urlStub, loggerStub)
+    let ctx = createContext(requestStub, resStub, urlStub, loggerStub)
 
     ctx = await signout(ctx)
 

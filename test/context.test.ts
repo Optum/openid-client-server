@@ -1,18 +1,18 @@
-import {IncomingMessage, ServerResponse} from 'http'
+import type {IncomingMessage, ServerResponse} from 'http'
 
-import {Logger} from 'pino'
-import {UrlWithParsedQuery} from 'url'
-import {createContext} from '../src/context'
+import type {UrlWithParsedQuery} from 'url'
+import type {Logger} from 'pino'
 import {stubInterface} from 'ts-sinon'
 import test from 'ava'
+import {createContext} from '../src/context'
 
 test('createContext should default sessionId, tokenSet and done as expected', t => {
-    const reqStub = stubInterface<IncomingMessage>()
+    const requestStub = stubInterface<IncomingMessage>()
     const resStub = stubInterface<ServerResponse>()
     const urlStub = stubInterface<UrlWithParsedQuery>()
     const loggerStub = stubInterface<Logger>()
 
-    const ctx = createContext(reqStub, resStub, urlStub, loggerStub)
+    const ctx = createContext(requestStub, resStub, urlStub, loggerStub)
 
     t.is(ctx.sessionId, null)
     t.is(ctx.tokenSet, null)

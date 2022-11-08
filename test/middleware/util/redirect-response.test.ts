@@ -1,7 +1,7 @@
-import {ServerResponse} from 'http'
-import {redirectResponse} from '../../../src/middleware/util'
+import type {ServerResponse} from 'http'
 import {stubInterface} from 'ts-sinon'
 import test from 'ava'
+import {redirectResponse} from '../../../src/middleware/util'
 
 test('redirectResponse should set location as expected', t => {
     const resStub = stubInterface<ServerResponse>()

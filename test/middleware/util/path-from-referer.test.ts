@@ -1,5 +1,5 @@
-import {pathFromReferer} from '../../../src/middleware/util'
 import test from 'ava'
+import {pathFromReferer} from '../../../src/middleware/util'
 
 test('pathFromReferer should get path with or without qs', t => {
     const testQs1 = 'val1=123,val2=456'

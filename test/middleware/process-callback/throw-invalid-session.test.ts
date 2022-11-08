@@ -1,17 +1,16 @@
-import * as util from '../../../src/middleware/util'
-
-import {IncomingMessage, ServerResponse} from 'http'
+import type {IncomingMessage, ServerResponse} from 'http'
+import type {UrlWithParsedQuery} from 'url'
 import sinon, {stubInterface} from 'ts-sinon'
-
-import {Client} from 'openid-client'
-import {Logger} from 'pino'
-import {MemorySessionStore} from '../../../src/session'
-import {testOptions} from '../../helpers/test-options'
-import {UrlWithParsedQuery} from 'url'
-import {createContext} from '../../../src/context'
-import {processCallbackMiddleware} from '../../../src/middleware/process-callback-middleware'
+import type {Client} from 'openid-client'
+import type {Logger} from 'pino'
 import test from 'ava'
 import {v4 as uuid} from 'uuid'
+import * as util from '../../../src/middleware/util'
+
+import {MemorySessionStore} from '../../../src/session'
+import {testOptions} from '../../helpers/test-options'
+import {createContext} from '../../../src/context'
+import {processCallbackMiddleware} from '../../../src/middleware/process-callback-middleware'
 
 const redirectResponseStub = sinon.stub(util, 'redirectResponse')
 
@@ -28,13 +27,13 @@ test('processCallbackMiddleware should throw invalid session when no session or 
         sessionStore
     )
 
-    const reqStub = stubInterface<IncomingMessage>()
+    const requestStub = stubInterface<IncomingMessage>()
     const resStub = stubInterface<ServerResponse>()
     const urlStub = stubInterface<UrlWithParsedQuery>()
     const loggerStub = stubInterface<Logger>()
     urlStub.pathname = processCallbackPath
 
-    let ctx = createContext(reqStub, resStub, urlStub, loggerStub)
+    let ctx = createContext(requestStub, resStub, urlStub, loggerStub)
     ctx.sessionId = testSessionId
 
     ctx = await processCallback(ctx)
@@ -44,7 +43,7 @@ test('processCallbackMiddleware should throw invalid session when no session or 
     t.is(redirectResponseStub.args[0][1], ctx.res)
     redirectResponseStub.resetHistory()
 
-    let ctx2 = createContext(reqStub, resStub, urlStub, loggerStub)
+    let ctx2 = createContext(requestStub, resStub, urlStub, loggerStub)
     ctx2.sessionId = testSessionId
 
     await sessionStore.set(testSessionId, {

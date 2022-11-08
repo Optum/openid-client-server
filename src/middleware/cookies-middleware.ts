@@ -1,11 +1,11 @@
 import {DefaultErrorResponse, qsOfErrorResponse} from '../status'
-import {pathsMatch, redirectResponse} from './util'
 
-import {Context} from '../context'
-import {OpenIdClientMiddleware} from './types'
-import {Options} from '../options'
-import {SessionStore} from '../session'
+import type {Context} from '../context'
+import type {Options} from '../options'
+import type {SessionStore} from '../session'
 import {ensureCookies} from '../cookies'
+import type {OpenIdClientMiddleware} from './types'
+import {pathsMatch, redirectResponse} from './util'
 
 export const cookiesMiddleware = (
     options: Options,

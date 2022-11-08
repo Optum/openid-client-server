@@ -1,10 +1,10 @@
-import * as requestListener from '../src/request-listener'
-import {clientServer} from '../src/client-server'
-import {testOptions} from './helpers/test-options'
+import type {IncomingMessage, ServerResponse} from 'http'
 import sinon from 'ts-sinon'
 import test from 'ava'
-import {IncomingMessage, ServerResponse} from 'http'
+import * as requestListener from '../src/request-listener'
+import {clientServer} from '../src/client-server'
 import {MemorySessionStore} from '../src'
+import {testOptions} from './helpers/test-options'
 
 test('clientServer should create server and pass through expected options', async t => {
     const createRequestListenerStub = sinon
