@@ -151,6 +151,7 @@
     "packageManager": "yarn@3.2.3",
     "resolutions": {
         "lodash": "4.17.21",
-        "vm2": "3.9.11"
+        "vm2": "3.9.11",
+        "semver-regex": "3.1.4"
     }
 }
