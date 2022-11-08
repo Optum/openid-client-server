@@ -14,7 +14,7 @@ test('createContext should default sessionId, tokenSet and done as expected', t 
 
     const ctx = createContext(requestStub, resStub, urlStub, loggerStub)
 
-    t.is(ctx.sessionId, null)
-    t.is(ctx.tokenSet, null)
+    t.is(ctx.sessionId, undefined)
+    t.is(ctx.tokenSet, undefined)
     t.is(ctx.done, false)
 })

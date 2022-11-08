@@ -18,9 +18,9 @@ import {MemorySessionStore} from '../../src/session'
 import {
     discoveryPath,
     issuer,
-    openIdDiscoveryConfiguration,
     testOptionsWithEmitEvents
 } from '../helpers/test-options'
+import openIdDiscoveryConfiguration from '../helpers/example-openid-configuration.json'
 
 const createMiddlewareStub = sinon.stub(middleware, 'createMiddleware')
 const securePathCheckMiddlewareStub = sinon.stub(

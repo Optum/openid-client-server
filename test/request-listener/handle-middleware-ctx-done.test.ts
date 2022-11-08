@@ -9,12 +9,8 @@ import * as spcMiddleware from '../../src/middleware/secure-path-check-middlewar
 import type {Context} from '../../src/context'
 import {MemorySessionStore} from '../../src/session'
 import {createRequestListener} from '../../src'
-import {
-    discoveryPath,
-    issuer,
-    openIdDiscoveryConfiguration,
-    testOptions
-} from '../helpers/test-options'
+import {discoveryPath, issuer, testOptions} from '../helpers/test-options'
+import openIdDiscoveryConfiguration from '../helpers/example-openid-configuration.json'
 
 const createMiddlewareStub = sinon.stub(middleware, 'createMiddleware')
 const securePathCheckMiddlewareStub = sinon.stub(

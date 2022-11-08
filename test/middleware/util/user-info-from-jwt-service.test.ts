@@ -102,7 +102,7 @@ test('userInfoFromJwt should return jwt body as json', async t => {
     jwksClientStub.getSigningKey.callsFake(
         (
             kid: string,
-            cb: (error: Error | undefined, key: jwksClient.SigningKey) => void
+            cb: (error: Error | null, key: jwksClient.SigningKey) => void
         ): void => {
             t.is(kid, testJwtParts.header.kid)
             cb(null, signingKeyStub)

@@ -1,17 +1,13 @@
-import {PassThrough} from 'node:stream'
+import {PassThrough} from 'stream'
 import {Request, Response} from 'mock-http'
 import nock from 'nock'
 import sinon, {stubObject} from 'ts-sinon'
 import test from 'ava'
 import {createRequestListener, resolveOptions} from '../../src'
-import {MemorySessionStore} from '../../src/session'
-import type {Options} from '../../src/options'
-import {
-    discoveryPath,
-    issuer,
-    openIdDiscoveryConfiguration,
-    testOptions
-} from '../helpers/test-options'
+import {MemorySessionStore} from '../../src'
+import type {Options} from '../../src'
+import {discoveryPath, issuer, testOptions} from '../helpers/test-options'
+import openIdDiscoveryConfiguration from '../helpers/example-openid-configuration.json'
 import {clone} from '../../src/middleware/util'
 
 test.beforeEach(t => {

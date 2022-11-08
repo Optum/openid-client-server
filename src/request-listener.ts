@@ -8,8 +8,6 @@ import type {Logger} from 'pino'
 import pino from 'pino'
 import type {Context} from './context'
 import {createContext} from './context'
-// eslint-disable-next-line node/no-deprecated-api
-
 import type {Options} from './options'
 import type {SessionStore} from './session'
 import {createMiddleware} from './middleware'
