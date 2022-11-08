@@ -2938,7 +2938,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-env@npm:^7.0.1":
+"cross-env@npm:^7.0.3":
   version: 7.0.3
   resolution: "cross-env@npm:7.0.3::__archiveUrl=https%3A%2F%2Frepo1.uhc.com%3A443%2Fartifactory%2Fapi%2Fnpm%2Fnpm-virtual%2Fcross-env%2F-%2Fcross-env-7.0.3.tgz"
   dependencies:
@@ -3316,10 +3316,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^8.2.0":
-  version: 8.6.0
-  resolution: "dotenv@npm:8.6.0::__archiveUrl=https%3A%2F%2Frepo1.uhc.com%3A443%2Fartifactory%2Fapi%2Fnpm%2Fnpm-virtual%2Fdotenv%2F-%2Fdotenv-8.6.0.tgz"
-  checksum: 38e902c80b0666ab59e9310a3d24ed237029a7ce34d976796349765ac96b8d769f6df19090f1f471b77a25ca391971efde8a1ea63bb83111bd8bec8e5cc9b2cd
+"dotenv@npm:^16.0.3":
+  version: 16.0.3
+  resolution: "dotenv@npm:16.0.3::__archiveUrl=https%3A%2F%2Frepo1.uhc.com%3A443%2Fartifactory%2Fapi%2Fnpm%2Fnpm-virtual%2Fdotenv%2F-%2Fdotenv-16.0.3.tgz"
+  checksum: afcf03f373d7a6d62c7e9afea6328e62851d627a4e73f2e12d0a8deae1cd375892004f3021883f8aec85932cd2834b091f568ced92b4774625b321db83b827f8
   languageName: node
   linkType: hard
 
@@ -3555,10 +3555,10 @@ __metadata:
   resolution: "examples-nextjs@workspace:."
   dependencies:
     "@types/react": ^16.9.23
-    cross-env: ^7.0.1
-    dotenv: ^8.2.0
-    isomorphic-unfetch: ^3.0.0
-    next: ^9.2.2
+    cross-env: ^7.0.3
+    dotenv: ^16.0.3
+    isomorphic-unfetch: ^3.1.0
+    next: ^9.5.5
     react: ^16.13.0
     react-dom: ^16.13.0
     rimraf: ^3.0.2
@@ -4435,7 +4435,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isomorphic-unfetch@npm:^3.0.0":
+"isomorphic-unfetch@npm:^3.1.0":
   version: 3.1.0
   resolution: "isomorphic-unfetch@npm:3.1.0::__archiveUrl=https%3A%2F%2Frepo1.uhc.com%3A443%2Fartifactory%2Fapi%2Fnpm%2Fnpm-virtual%2Fisomorphic-unfetch%2F-%2Fisomorphic-unfetch-3.1.0.tgz"
   dependencies:
@@ -5087,7 +5087,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:^9.2.2":
+"next@npm:^9.5.5":
   version: 9.5.5
   resolution: "next@npm:9.5.5::__archiveUrl=https%3A%2F%2Frepo1.uhc.com%3A443%2Fartifactory%2Fapi%2Fnpm%2Fnpm-virtual%2Fnext%2F-%2Fnext-9.5.5.tgz"
   dependencies:
