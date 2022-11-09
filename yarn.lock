@@ -1497,19 +1497,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"brace-expansion@npm:^1.1.7":
-  version: 1.1.11
-  resolution: "brace-expansion@npm:1.1.11"
-  dependencies:
-    balanced-match: ^1.0.0
-    concat-map: 0.0.1
-  checksum: faf34a7bb0c3fcf4b59c7808bc5d2a96a40988addf2e7e09dfbb67a2251800e0d14cd2bfc1aa79174f2f5095c54ff27f46fb1289fe2d77dac755b5eb3434cc07
-  languageName: node
-  linkType: hard
-
 "brace-expansion@npm:^2.0.1":
   version: 2.0.1
-  resolution: "brace-expansion@npm:2.0.1"
+  resolution: "brace-expansion@npm:2.0.1::__archiveUrl=https%3A%2F%2Frepo1.uhc.com%3A443%2Fartifactory%2Fapi%2Fnpm%2Fnpm-virtual%2Fbrace-expansion%2F-%2Fbrace-expansion-2.0.1.tgz"
   dependencies:
     balanced-match: ^1.0.0
   checksum: a61e7cd2e8a8505e9f0036b3b6108ba5e926b4b55089eeb5550cd04a471fe216c96d4fe7e4c7f995c728c554ae20ddfc4244cad10aef255e72b62930afd233d1
@@ -1975,13 +1965,6 @@ __metadata:
   version: 3.6.0
   resolution: "compare-versions@npm:3.6.0"
   checksum: 7492a50cdaa2c27f5254eee7c4b38856e1c164991bab3d98d7fd067fe4b570d47123ecb92523b78338be86aa221668fd3868bfe8caa5587dc3ebbe1a03d52b5d
-  languageName: node
-  linkType: hard
-
-"concat-map@npm:0.0.1":
-  version: 0.0.1
-  resolution: "concat-map@npm:0.0.1"
-  checksum: 902a9f5d8967a3e2faf138d5cb784b9979bad2e6db5357c5b21c568df4ebe62bcb15108af1b2253744844eb964fc023fbd9afbbbb6ddd0bcc204c6fb5b7bf3af
   languageName: node
   linkType: hard
 
@@ -4393,12 +4376,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^1.27.1":
-  version: 1.28.1
-  resolution: "jose@npm:1.28.1"
+"jose@npm:1.28.2":
+  version: 1.28.2
+  resolution: "jose@npm:1.28.2::__archiveUrl=https%3A%2F%2Frepo1.uhc.com%3A443%2Fartifactory%2Fapi%2Fnpm%2Fnpm-virtual%2Fjose%2F-%2Fjose-1.28.2.tgz"
   dependencies:
     "@panva/asn1.js": ^1.0.0
-  checksum: b91458949df7df08810b7a896a10751f25d3108dfcc41af138dc01e8e5bf7f90ea510cdb3d6bc37e3a293ec7d5cc26fb587de7ce15785a8109892c412e5c0416
+  checksum: d601afdc79b28ec1fc49bf089921943ac69b73312840c0e1d1dacb6fc3e9cf40d879a333652507177cc7f1cea0af1d36b2ca79f57e166297951e87abd2a96bac
   languageName: node
   linkType: hard
 
@@ -5012,21 +4995,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^3.0.4":
-  version: 3.0.4
-  resolution: "minimatch@npm:3.0.4"
-  dependencies:
-    brace-expansion: ^1.1.7
-  checksum: 66ac295f8a7b59788000ea3749938b0970344c841750abd96694f80269b926ebcafad3deeb3f1da2522978b119e6ae3a5869b63b13a7859a456b3408bd18a078
-  languageName: node
-  linkType: hard
-
-"minimatch@npm:^5.0.1":
-  version: 5.1.0
-  resolution: "minimatch@npm:5.1.0"
+"minimatch@npm:5.0.1":
+  version: 5.0.1
+  resolution: "minimatch@npm:5.0.1::__archiveUrl=https%3A%2F%2Frepo1.uhc.com%3A443%2Fartifactory%2Fapi%2Fnpm%2Fnpm-virtual%2Fminimatch%2F-%2Fminimatch-5.0.1.tgz"
   dependencies:
     brace-expansion: ^2.0.1
-  checksum: 15ce53d31a06361e8b7a629501b5c75491bc2b59712d53e802b1987121d91b433d73fcc5be92974fde66b2b51d8fb28d75a9ae900d249feb792bb1ba2a4f0a90
+  checksum: b34b98463da4754bc526b244d680c69d4d6089451ebe512edaf6dd9eeed0279399cfa3edb19233513b8f830bf4bfcad911dddcdf125e75074100d52f724774f0
   languageName: node
   linkType: hard
 
