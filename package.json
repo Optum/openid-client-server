@@ -117,6 +117,9 @@
     "resolutions": {
         "lodash": "4.17.21",
         "vm2": "3.9.11",
-        "semver-regex": "3.1.4"
+        "semver-regex": "3.1.4",
+        "glob-parent": "5.1.2",
+        "jose": "1.28.2",
+        "got@npm": "11.8.5"
     }
 }
