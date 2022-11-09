@@ -1,6 +1,6 @@
 {
     "name": "@optum/openid-client-server",
-    "version": "1.0.8",
+    "version": "1.1.0",
     "description": "An OpenId Relying Party (RP, Client) application server.",
     "license": "Apache-2.0",
     "repository": "https://github.com/optum/openid-client-server",
