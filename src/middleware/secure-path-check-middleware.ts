@@ -13,11 +13,8 @@ export const securePathCheckMiddleware = (
 ): BooleanCheckMiddleware => {
     return async (ctx: Context): Promise<boolean> => {
         const parsedUrl = ctx.url
-        const {
-            securedPaths,
-            signInPath,
-            errorPagePath
-        } = options.clientServerOptions
+        const {securedPaths, signInPath, errorPagePath} =
+            options.clientServerOptions
         if (securedPaths) {
             if (!ctx.sessionId) {
                 ctx.log.debug('secure path check detected no session id')

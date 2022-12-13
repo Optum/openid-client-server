@@ -37,9 +37,8 @@ export const signInMiddleware = (
                         `codeVerifier value when building auth url ${codeVerifier}`
                     )
 
-                    const code_challenge = generators.codeChallenge(
-                        codeVerifier
-                    )
+                    const code_challenge =
+                        generators.codeChallenge(codeVerifier)
 
                     authUrl = client.authorizationUrl({
                         state,

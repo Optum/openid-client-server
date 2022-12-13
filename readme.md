@@ -163,33 +163,8 @@ The original goal of this module was to provide as easy way to implement OpenID 
 
 **VS Code**
 
-> extensions
-
--   [Linter for XO](https://marketplace.visualstudio.com/items?itemName=samverschueren.linter-xo)
 -   [Prettier - Code Formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
-> settings.json
+**IntelliJ**
 
-```json
-{
-    "xo.enable": true,
-    "xo.format.enable": true,
-    "javascript.format.enable": false,
-    "javascript.validate.enable": false,
-    "prettier.tabWidth": 4,
-    "prettier.singleQuote": true,
-    "editor.formatOnSave": true,
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "samverschueren.linter-xo"
-    },
-    "[typescript]": {
-        "editor.defaultFormatter": "samverschueren.linter-xo"
-    },
-    "[javascript]": {
-        "editor.defaultFormatter": "samverschueren.linter-xo"
-    },
-    "[json]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    }
-}
-```
+-   [Prettier](https://www.jetbrains.com/help/idea/prettier.html)
