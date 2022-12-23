@@ -30,7 +30,6 @@ export const testOptions: Options = {
     },
     loggerOptions: {
         level: 'silent',
-        useLevelLabels: true,
         name: 'openid-client-server'
     },
     proxyOptions: {

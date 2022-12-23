@@ -397,18 +397,6 @@ const defaultLoggerOptionsEnvMapItems: EnvMapItem[] = [
         required: false
     },
     {
-        propKey: 'prettyPrint',
-        envKey: 'OPENID_LOG_PRETTY',
-        defaultValue: process.env.NODE_ENV !== 'production',
-        required: false
-    },
-    {
-        propKey: 'useLevelLabels',
-        envKey: 'OPENID_LOG_USE_LEVEL_LABELS',
-        defaultValue: true,
-        required: false
-    },
-    {
         propKey: 'name',
         envKey: 'OPENID_LOG_NAME',
         defaultValue: 'openid-client-server',
@@ -483,6 +471,11 @@ export const resolveOptions = (): Options => {
     const parsedDefaultLogOptions = parseOptions(
         defaultLoggerOptionsEnvMapItems
     )
+    parsedDefaultLogOptions.options.formatters = {
+        level: (label: string) => {
+            return {level: label}
+        }
+    }
     const parsedProxyOptions = parseOptions(proxyOptionsEnvMapItems)
 
     const errors = parsedServerOptions.errors
