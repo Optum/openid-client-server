@@ -113,10 +113,10 @@ export const createUserInfoFromJwtService = (
 
                 jwksClientInstance.getSigningKey(
                     header.kid,
-                    (error: Error | null, key: jwksClient.SigningKey): void => {
+                    (error: Error | null, key: jwksClient.SigningKey | undefined): void => {
                         const _key = key
                         const signingKey =
-                            _key.getPublicKey() ||
+                            _key?.getPublicKey() ||
                             (_key as jwksClient.RsaSigningKey).rsaPublicKey
                         callback(error, signingKey)
                     }
